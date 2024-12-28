@@ -1,25 +1,28 @@
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
 import { Trip } from '../types/trip';
+import EventBus from '../common/EventBus';
 
-const API_URL = 'http://localhost:8080/api/trips';
+const API_URL = '/api/trips';
 
 const instance = axios.create({
     baseURL: API_URL,
     headers: {
         'Content-Type': 'application/json',
     },
+    withCredentials: true
 });
 
-// Add a request interceptor to dynamically add the token
-instance.interceptors.request.use((config) => {
-    const token = localStorage.getItem('jwtToken'); // Retrieve token dynamically
-    if (token) {
-        config.headers.Authorization = `Bearer ${token}`;
+// Add response interceptor
+instance.interceptors.response.use(
+    (response) => response,
+    (error: AxiosError) => {
+        if (error.response?.status === 401) {
+            EventBus.dispatch("logout");
+            window.location.href = '/login';
+        }
+        return Promise.reject(error);
     }
-    return config;
-}, (error) => {
-    return Promise.reject(error);
-});
+);
 
 export const tripApi = {
     // User-Specific Endpoints

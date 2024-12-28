@@ -1,8 +1,7 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Trip } from "../types/trip";
 import { TripList } from "./TripList.tsx";
 import { TripForm } from "./TripForm.tsx";
-import { TripDetails } from "./TripDetails.tsx";
 import { tripApi } from '../services/api';
 import '../styles/components/Dashboard.css';
 
@@ -13,12 +12,29 @@ export const Dashboard: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
+  useEffect(() => {
+    const fetchTrips = async () => {
+      try {
+        setLoading(true);
+        const response = await tripApi.getCurrentUserTrips();
+        setTrips(response.data);
+      } catch (err) {
+        console.error('Error fetching trips:', err);
+        setError('Failed to load trips. Please try again.');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchTrips();
+  }, []);
+
   const handleAddTrip = async (newTrip: Omit<Trip, 'id'>) => {
     try {
       setLoading(true);
       setError(null);
-      const createdTrip = await tripApi.createTrip(newTrip);
-      setTrips(prevTrips => [...prevTrips, createdTrip]);
+      const response = await tripApi.createTrip(newTrip);
+      setTrips(prevTrips => [...prevTrips, response.data]);
     } catch (err) {
       console.error('Error creating trip:', err);
       setError('Failed to create trip. Please try again.');
@@ -26,7 +42,6 @@ export const Dashboard: React.FC = () => {
       setLoading(false);
     }
   };
-
 
   return (
     <div className="dashboard">
@@ -39,21 +54,16 @@ export const Dashboard: React.FC = () => {
                 No trips planned yet. Start by adding a new trip!
               </div>
             ) : (
-              <TripList
-
+              <TripList trips={trips}
+                onSelectTrip={setSelectedTrip}
               />
             )}
           </div>
           <div className="form-section">
-            <TripForm onSubmit={handleAddTrip}/>
+            <TripForm onSubmit={handleAddTrip} />
           </div>
         </div>
       </main>
-      {(
-        <TripDetails
-
-        />
-      )}   
     </div>
   );
 };
