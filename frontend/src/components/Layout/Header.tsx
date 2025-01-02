@@ -69,7 +69,7 @@ export const Header: React.FC = () => {
                         {currentUser ? (
                             <>
                                 <Link to="/dashboard" className="nav-link">Dashboard</Link>
-                                <span className="welcome-text">Welcome, {currentUser.username}</span>
+                                <Link to="/profile" className="welcome-text">Welcome, {currentUser.username}</Link>
                                 <button onClick={logOut} className="logout-button">
                                     <LogIn className="button-icon" />
                                     Logout

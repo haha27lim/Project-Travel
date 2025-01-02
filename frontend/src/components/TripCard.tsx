@@ -3,22 +3,34 @@ import { Calendar, MapPin, Clock, FileText } from 'lucide-react';
 import { Trip } from "../types/trip";
 import { formatDateRange } from '../utils/dateUtils';
 import '../styles/components/TripCard.css';
+import { TripActions } from './TripActions';
 
 interface TripCardProps {
   trip: Trip;
   onSelect: (trip: Trip) => void;
+  onEdit?: (trip: Trip) => void;
+  onDelete?: (tripId: number) => void;
+  viewOnly?: boolean;
 }
 
-export const TripCard: React.FC<TripCardProps> = ({ trip, onSelect }) => {
+export const TripCard: React.FC<TripCardProps> = ({ trip, onSelect, onEdit, onDelete, viewOnly = false }) => {
   return (
-    <div 
+    <div
       onClick={() => onSelect(trip)}
       className="trip-card"
     >
-      <h3 className="trip-title">
-        <MapPin className="icon icon-blue" />
-        {trip.destination}
-      </h3>
+      <div className="flex justify-between items-start">
+        <h3 className="trip-title" >
+          <MapPin className="icon icon-blue" />
+          {trip.destination}
+        </h3>
+        {!viewOnly && (
+          <TripActions
+            onEdit={() => onEdit?.(trip)}
+            onDelete={() => onDelete?.(trip?.id || 0)}
+          />
+        )}
+      </div>
       <div className="trip-info">
         <Calendar className="icon" />
         <span>{formatDateRange(trip.startDate, trip.endDate)}</span>
@@ -29,7 +41,7 @@ export const TripCard: React.FC<TripCardProps> = ({ trip, onSelect }) => {
       </div>
       {trip.notes && (
         <div className="trip-notes">
-          <FileText className="icon" />
+          <FileText className="w-5 h-5" />
           <p>{trip.notes}</p>
         </div>
       )}

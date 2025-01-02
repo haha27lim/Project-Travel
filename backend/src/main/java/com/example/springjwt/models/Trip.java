@@ -30,11 +30,9 @@ public class Trip {
     private Long id;
     private String destination;
 
-    @Future(message = "Start date must be in the future")
     @Column(name = "start_date")
     private LocalDate startDate;
     
-    @Future(message = "End date must be in the future")
     @Column(name = "end_date")
     private LocalDate endDate;
     

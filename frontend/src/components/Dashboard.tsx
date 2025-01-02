@@ -43,6 +43,26 @@ export const Dashboard: React.FC = () => {
     }
   };
 
+  const handleUpdateTrip = async (updatedTrip: Trip) => {
+    try {
+      const response = await tripApi.updateTrip(Number(updatedTrip.id), updatedTrip);
+      setTrips(prevTrips => prevTrips.map(trip => trip.id === updatedTrip.id ? response.data : trip));
+    } catch (err) {
+      console.error('Error updating trip:', err);
+      setError('Failed to update trip. Please try again.');
+    }
+  };
+
+  const handleDeleteTrip = async (tripId: number) => {
+    try {
+      await tripApi.deleteTrip(Number(tripId));
+      setTrips(prevTrips => prevTrips.filter(trip => trip.id !== tripId));
+    } catch (err) {
+      console.error('Error deleting trip:', err);
+      setError('Failed to delete trip. Please try again.');
+    }
+  };
+
   return (
     <div className="dashboard">
       <main className="dashboard-main">
@@ -56,6 +76,8 @@ export const Dashboard: React.FC = () => {
             ) : (
               <TripList trips={trips}
                 onSelectTrip={setSelectedTrip}
+                onUpdateTrip={handleUpdateTrip}
+                onDeleteTrip={handleDeleteTrip}
               />
             )}
           </div>

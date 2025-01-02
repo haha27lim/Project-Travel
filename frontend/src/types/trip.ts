@@ -1,5 +1,5 @@
 export interface Trip {
-    id: string;
+    id?: number;
     destination: string;
     startDate: string;
     endDate: string;
@@ -8,7 +8,7 @@ export interface Trip {
 }
 
 export interface Activity {
-    id: string;
+    id?: number;
     name: string;
     date: string;
     time: string;

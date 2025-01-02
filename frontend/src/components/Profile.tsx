@@ -31,6 +31,7 @@ const Profile: React.FC = () => {
 
   return (
     <div className="container">
+
       {userReady ? (
         <div>
           <header className="jumbotron">

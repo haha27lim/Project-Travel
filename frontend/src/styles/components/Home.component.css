@@ -163,3 +163,19 @@
     line-height: 1.6;
     font-family: 'Outfit', sans-serif;
   }
+
+  .recent-section {
+    max-width: 80rem;
+    margin: 2rem auto;
+    padding: 2rem 1rem;
+    background-color: white;
+    border-radius: 1rem;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  }
+  
+  .recent-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+    color: #1f2937;
+  }

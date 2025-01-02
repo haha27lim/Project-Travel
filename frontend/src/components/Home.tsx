@@ -2,6 +2,11 @@ import { Map, Calendar, List, Users } from "lucide-react";
 import '../styles/components/Home.component.css';
 import { useAuth } from "../contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { Trip } from "../types/trip";
+import { TripList } from "./TripList";
+import { TripListView } from "./TripListView";
+import { tripApi } from "../services/api";
 
 const Home: React.FC = () => {
   // const [content, setContent] = useState<string>("");
@@ -23,6 +28,8 @@ const Home: React.FC = () => {
 
   const { currentUser } = useAuth();
   const navigate = useNavigate();
+  const [trips, setTrips] = useState<Trip[]>([]);
+  const [selectedTrip, setSelectedTrip] = useState<Trip | null>(null);
 
   const handleStartPlanning = () => {
     if (currentUser) {
@@ -32,9 +39,23 @@ const Home: React.FC = () => {
     }
   };
 
+  useEffect(() => {
+    if (currentUser) {
+      const fetchTrips = async () => {
+        try {
+          const response = await tripApi.getCurrentUserTrips();
+          setTrips(response.data.slice(0, 3));
+        } catch (error) {
+          console.error('Error fetching trips:', error);
+        }
+      };
+      fetchTrips();
+    }
+  }, [currentUser]);
+
   return (
     <div className="landing-page">
-      
+
       <section className="hero-section">
         <div className="hero-background">
           <img
@@ -43,7 +64,7 @@ const Home: React.FC = () => {
             className="hero-image"
           />
         </div>
-        
+
         <div className="hero-content">
           <h1 className="hero-title">Plan Your Dream Journey</h1>
           <p className="hero-description">
@@ -58,10 +79,26 @@ const Home: React.FC = () => {
         </div>
       </section>
 
+      {currentUser && (
+        <div className="recent-section">
+          <h2 className="recent-title">Recently viewed</h2>
+          {trips.length === 0 ? (
+            <div className="empty-state">
+              No trips planned yet. Start by adding a new trip!
+            </div>
+          ) : (
+            <TripListView 
+              trips={trips}
+              onSelectTrip={setSelectedTrip}
+            />
+          )}
+        </div>
+      )}
+
       <section className="features-section">
         <div className="features-container">
           <h2 className="features-title">Why Choose Our Travel Planner?</h2>
-          
+
           <div className="features-grid">
             <div className="feature-card">
               <div className="feature-icon-container">
