@@ -5,6 +5,7 @@ import { formatDateRange } from '../utils/dateUtils';
 import '../styles/components/TripCard.css';
 import { TripActions } from './TripActions';
 import { useNavigate } from 'react-router-dom';
+import { setLastViewedTimestamp } from '../utils/tripUtil';
 
 interface TripCardProps {
   trip: Trip;
@@ -18,6 +19,9 @@ export const TripCard: React.FC<TripCardProps> = ({ trip, onSelect, onEdit, onDe
   const navigate = useNavigate();
 
   const handleClick = () => {
+    if (trip.id) {
+      setLastViewedTimestamp(trip.id);
+    }
     navigate(`/trips/${trip.id}`);
   };
 

@@ -5,6 +5,7 @@ import { Clock, FileText, MapPin, Pencil, Trash2, ArrowLeft, PlusCircle } from '
 import { tripApi } from '../services/api';
 import '../styles/components/TripDetails.css';
 import { TripForm } from './TripForm';
+import { PlaceForm } from './PlaceForm';
 
 export const TripDetails: React.FC = () => {
   const { id } = useParams();
@@ -13,6 +14,8 @@ export const TripDetails: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [isEditing, setIsEditing] = useState(false);
+  const [isAddingPlace, setIsAddingPlace] = useState(false);
+  const [editingPlace, setEditingPlace] = useState<Place | null>(null);
 
   useEffect(() => {
     const fetchTrip = async () => {
@@ -63,16 +66,45 @@ export const TripDetails: React.FC = () => {
     }
   };
 
-  const handleEditPlace = (place: Place) => {
-    setIsEditing(true);
-    // You can add specific logic for editing a single place
+  const handleAddPlace = () => {
+    setIsAddingPlace(true);
   };
-  
+
+  const handleEditPlace = (place: Place) => {
+    setEditingPlace(place);
+  };
+
+  const handlePlaceSubmit = async (place: Place, isEditing: boolean) => {
+    try {
+      if (isEditing && editingPlace) {
+        setTrip(prev => {
+          if (!prev) return prev;
+          return {
+            ...prev,
+            places: prev.places?.map(p =>
+              p.id === editingPlace.id ? { ...place, id: editingPlace.id } : p
+            ) || []
+          };
+        });
+        setEditingPlace(null);
+      } else {
+        setTrip(prev => {
+          if (!prev) return prev;
+          return {
+            ...prev,
+            places: prev.places?.concat({ ...place, id: Date.now() }) || []
+          };
+        });
+        setIsAddingPlace(false);
+      }
+    } catch (err) {
+      console.error('Error saving place:', err);
+    }
+  };
+
   const handleDeletePlace = async (placeId: number) => {
     if (window.confirm('Are you sure you want to delete this place?')) {
       try {
-        // Add your API call to delete the place
-        // Update the trip state to remove the deleted place
         setTrip(prev => {
           if (!prev) return prev;
           return {
@@ -157,7 +189,7 @@ export const TripDetails: React.FC = () => {
                 Places to Visit
               </h3>
               <button
-                onClick={() => setIsEditing(true)}
+                onClick={handleAddPlace}
                 className="add-place-button"
                 title="Add new place"
               >
@@ -201,6 +233,21 @@ export const TripDetails: React.FC = () => {
               ))}
             </div>
           </div>
+        )}
+
+        {isAddingPlace && (
+          <PlaceForm
+            onSubmit={(place) => handlePlaceSubmit(place, false)}
+            onCancel={() => setIsAddingPlace(false)}
+          />
+        )}
+
+        {editingPlace && (
+          <PlaceForm
+            place={editingPlace}
+            onSubmit={(place) => handlePlaceSubmit(place, true)}
+            onCancel={() => setEditingPlace(null)}
+          />
         )}
 
         {trip.activities && trip.activities.length > 0 && (

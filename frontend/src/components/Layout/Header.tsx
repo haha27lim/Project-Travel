@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../../contexts/AuthContext";
 import AuthService from "../../services/auth.service";
 import { Compass, LogIn, UserPlus } from "lucide-react";
@@ -7,7 +7,7 @@ import { useEffect } from "react";
 import EventBus from "../../common/EventBus";
 
 export const Header: React.FC = () => {
-
+    const navigate = useNavigate();
     const { currentUser, showAdminBoard, setCurrentUser, setShowAdminBoard } = useAuth();
 
     useEffect(() => {
@@ -29,6 +29,7 @@ export const Header: React.FC = () => {
         AuthService.logout();
         setShowAdminBoard(false);
         setCurrentUser(undefined);
+        navigate('/');
     };
 
     return (

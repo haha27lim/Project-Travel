@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import { Trip } from "../types/trip";
 import { TripListView } from "./TripListView";
 import { tripApi } from "../services/api";
+import { getLastViewedTimestamp } from "../utils/tripUtil";
 
 
 const Home: React.FC = () => {
@@ -28,7 +29,14 @@ const Home: React.FC = () => {
       const fetchTrips = async () => {
         try {
           const response = await tripApi.getCurrentUserTrips();
-          setTrips(response.data.slice(0, 3));
+          const sortedTrips = response.data
+          .sort((a, b) => {
+            const timestampA = getLastViewedTimestamp(a.id!);
+            const timestampB = getLastViewedTimestamp(b.id!);
+            return timestampB - timestampA;
+          })
+          .slice(0, 3);
+          setTrips(sortedTrips);
         } catch (error) {
           console.error('Error fetching trips:', error);
         }

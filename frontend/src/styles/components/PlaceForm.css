@@ -1,0 +1,64 @@
+.inline-place-form {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background-color: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 8px;
+  margin-bottom: 16px;
+}
+
+.place-input {
+  flex: 1;
+  border: none;
+  outline: none;
+  padding: 4px 8px;
+  font-size: 0.875rem;
+}
+
+.inline-place-actions {
+  display: flex;
+  gap: 4px;
+}
+
+.action-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.action-btn.submit {
+  color: #3b82f6;
+  background-color: #eff6ff;
+}
+
+.action-btn.submit:hover {
+  background-color: #dbeafe;
+}
+
+.action-btn.cancel {
+  color: #ef4444;
+  background-color: #fef2f2;
+}
+
+.action-btn.cancel:hover {
+  background-color: #fee2e2;
+}
+
+
+
+
+
+
+.place-basic-info {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  gap: 10px;
+}
