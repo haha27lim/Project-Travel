@@ -4,6 +4,7 @@ import { Trip } from "../types/trip";
 import { formatDateRange } from '../utils/dateUtils';
 import '../styles/components/TripCard.css';
 import { TripActions } from './TripActions';
+import { useNavigate } from 'react-router-dom';
 
 interface TripCardProps {
   trip: Trip;
@@ -14,9 +15,15 @@ interface TripCardProps {
 }
 
 export const TripCard: React.FC<TripCardProps> = ({ trip, onSelect, onEdit, onDelete, viewOnly = false }) => {
+  const navigate = useNavigate();
+
+  const handleClick = () => {
+    navigate(`/trips/${trip.id}`);
+  };
+
   return (
     <div
-      onClick={() => onSelect(trip)}
+      onClick={handleClick}
       className="trip-card"
     >
       <div className="flex justify-between items-start">

@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
 
@@ -11,6 +11,7 @@ import BoardAdmin from "./components/BoardAdmin";
 import { Header } from './components/Layout/Header';
 import { AuthProvider } from './contexts/AuthContext';
 import { Dashboard } from './components/Dashboard';
+import { TripDetails } from './components/TripDetails';
 
 function App() {
 
@@ -26,12 +27,8 @@ function App() {
             <Route path="/profile" element={<Profile />} />
             <Route path="/user" element={<BoardUser />} />
             <Route path="/admin" element={<BoardAdmin />} />
-            <Route
-              path="/dashboard"
-              element={
-                  <Dashboard />
-              }
-            />
+            <Route path="/dashboard" element={<Dashboard />}/>
+            <Route path="/trips/:id" element={<TripDetails />} />
           </Routes>
       </BrowserRouter>
     </AuthProvider>

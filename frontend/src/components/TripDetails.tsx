@@ -1,50 +1,121 @@
-import React from 'react';
-import { Clock, FileText, MapPin, Pencil, Trash2, X } from 'lucide-react';
+import React, { useEffect, useState } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
 import { Trip } from "../types/trip";
+import { Clock, FileText, MapPin, Pencil, Trash2, ArrowLeft } from 'lucide-react';
+import { tripApi } from '../services/api';
 import '../styles/components/TripDetails.css';
+import { TripForm } from './TripForm';
 
-interface TripDetailsProps {
-  trip: Trip;
-  onClose: () => void;
-  onEdit: () => void;
-  onDelete: () => void;
-}
+export const TripDetails: React.FC = () => {
+  const { id } = useParams();
+  const navigate = useNavigate();
+  const [trip, setTrip] = useState<Trip | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [isEditing, setIsEditing] = useState(false);
 
-export const TripDetails: React.FC<TripDetailsProps> = ({ trip, onClose, onEdit, onDelete }) => {
+  useEffect(() => {
+    const fetchTrip = async () => {
+      try {
+        setLoading(true);
+        const response = await tripApi.getTripById(Number(id));
+        setTrip(response.data);
+      } catch (err) {
+        console.error('Error fetching trip:', err);
+        setError('Failed to load trip details');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    if (id) {
+      fetchTrip();
+    }
+  }, [id]);
+
+  if (loading) return <div>Loading...</div>;
+  if (error) return <div>{error}</div>;
+  if (!trip) return <div>Trip not found</div>;
+
+  const handleEdit = async () => {
+    setIsEditing(true);
+  };
+
+  const handleEditSubmit = async (updatedTrip: Trip) => {
+    try {
+      await tripApi.updateTrip(Number(id), updatedTrip);
+      setTrip(updatedTrip);
+      setIsEditing(false);
+    } catch (err) {
+      console.error('Error updating trip:', err);
+      setError('Failed to update trip');
+    }
+  };
+
+  const handleDelete = async () => {
+    if (window.confirm('Are you sure you want to delete this trip?')) {
+      try {
+        await tripApi.deleteTrip(Number(id));
+        navigate('/dashboard');
+      } catch (err) {
+        console.error('Error deleting trip:', err);
+      }
+    }
+  };
+
+  if (isEditing && trip) {
+    return (
+      <div className="modal-overlay">
+        <div className="modal-container">
+          <h2 className="text-xl font-semibold mb-4">Edit Trip</h2>
+          <TripForm
+            initialTrip={trip}
+            onSubmit={handleEditSubmit}
+            onCancel={() => setIsEditing(false)}
+          />
+        </div>
+      </div>
+    );
+  }
+
   return (
-    <div className="modal-overlay" onClick={onClose}>
-      <div className="modal-container" onClick={e => e.stopPropagation()}>
-        <div className="flex justify-between items-start mb-4">
+    <div className="trip-details-page">
+      <div className="trip-details-container">
+        <button
+          onClick={() => navigate(-1)}
+          className="back-button"
+        >
+          <ArrowLeft className="w-5 h-5" />
+          Back
+        </button>
+
+        <div className="flex justify-between items-start mb-4 mt-4">
           <h2 className="trip-title">
             <MapPin className="icon icon-blue" />
-            {trip.destination}
+            Trip to {trip.destination}
           </h2>
           <div className="flex items-center gap-2">
             <button
-              onClick={onEdit}
+              onClick={handleEdit}
               className="p-2 text-blue-600 hover:bg-blue-50 rounded-full transition-colors"
               title="Edit trip"
             >
               <Pencil className="w-5 h-5" />
             </button>
             <button
-              onClick={onDelete}
+              onClick={handleDelete}
               className="p-2 text-red-600 hover:bg-red-50 rounded-full transition-colors"
               title="Delete trip"
             >
               <Trash2 className="w-5 h-5" />
             </button>
-            <button
-              className="p-2 text-gray-500 hover:bg-gray-100 rounded-full transition-colors"
-              onClick={onClose}
-            >
-              <X className="w-5 h-5" />
-            </button>
           </div>
         </div>
+
         <p className="trip-info">
           {new Date(trip.startDate).toLocaleDateString()} - {new Date(trip.endDate).toLocaleDateString()}
         </p>
+
         {trip.notes && (
           <div className="border-t pt-4 mt-4">
             <h3 className="text-lg font-semibold mb-2 flex items-center gap-2">
@@ -54,6 +125,7 @@ export const TripDetails: React.FC<TripDetailsProps> = ({ trip, onClose, onEdit,
             <p className="text-gray-600 whitespace-pre-line">{trip.notes}</p>
           </div>
         )}
+
         {trip.activities && trip.activities.length > 0 && (
           <div className="trip-activities">
             <h3>Itinerary</h3>

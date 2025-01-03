@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { Trip } from "../types/trip";
 import { TripCard } from './TripCard';
-import { TripDetails } from './TripDetails';
 import '../styles/components/TripList.css';
 import { TripForm } from './TripForm';
 
@@ -13,13 +12,7 @@ interface TripListProps {
 }
 
 export const TripList: React.FC<TripListProps> = ({ trips, onSelectTrip, onUpdateTrip, onDeleteTrip }) => {
-  const [selectedTrip, setSelectedTrip] = useState<Trip | null>(null);
   const [editingTrip, setEditingTrip] = useState<Trip | null>(null);
-
-  const handleTripClick = (trip: Trip) => {
-    setSelectedTrip(trip);
-    onSelectTrip(trip);
-  };
 
   const handleEditSubmit = (updatedTrip: Trip) => {
     onUpdateTrip(updatedTrip);
@@ -30,26 +23,9 @@ export const TripList: React.FC<TripListProps> = ({ trips, onSelectTrip, onUpdat
     <>
       <div className="trip-grid">
         {trips.map((trip) => (
-          <TripCard key={trip.id} trip={trip} onSelect={handleTripClick} onEdit={setEditingTrip} onDelete={onDeleteTrip}/>
+          <TripCard key={trip.id} trip={trip} onSelect={onSelectTrip} onEdit={setEditingTrip} onDelete={onDeleteTrip}/>
         ))}
       </div>
-
-      {selectedTrip && (
-        <TripDetails 
-          trip={selectedTrip} 
-          onClose={() => setSelectedTrip(null)} 
-          onEdit={() => {
-            setEditingTrip(selectedTrip);
-            setSelectedTrip(null);
-          }}
-          onDelete={() => {
-            if (window.confirm('Are you sure you want to delete this trip?')) {
-              onDeleteTrip(selectedTrip?.id || 0);
-              setSelectedTrip(null);
-            }
-          }}
-        />
-      )}
 
       {editingTrip && (
         <div className="modal-overlay">

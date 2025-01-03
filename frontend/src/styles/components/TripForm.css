@@ -113,3 +113,82 @@
   border-radius: 0.375rem;
   transition: all 0.3s;
 }
+
+.activities-section {
+  margin-top: 1.5rem;
+  border-top: 1px solid rgb(229, 231, 235);
+  padding-top: 1.5rem;
+}
+
+.activities-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.section-subtitle {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: rgb(31, 41, 55);
+}
+
+.add-activity-button {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  background-color: rgb(239, 246, 255);
+  color: rgb(59, 130, 246);
+  border-radius: 0.375rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  transition: all 0.2s;
+}
+
+.add-activity-button:hover {
+  background-color: rgb(219, 234, 254);
+}
+
+.activity-form {
+  background-color: rgb(249, 250, 251);
+  border-radius: 0.5rem;
+  padding: 1rem;
+  margin-bottom: 1rem;
+}
+
+.activity-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.activity-header h4 {
+  font-size: 1rem;
+  font-weight: 500;
+  color: rgb(31, 41, 55);
+}
+
+.remove-activity-button {
+  color: rgb(239, 68, 68);
+  padding: 0.25rem;
+  border-radius: 9999px;
+  transition: all 0.2s;
+}
+
+.remove-activity-button:hover {
+  background-color: rgb(254, 226, 226);
+}
+
+.activity-fields {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.activity-datetime {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+}

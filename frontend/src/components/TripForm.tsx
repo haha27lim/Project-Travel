@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Trip } from "../types/trip";
+import { Activity, Trip } from "../types/trip";
 import { MapPin, PlusCircle, X } from "lucide-react";
 import { InteractiveMap } from './Map/InteractiveMap';
 import '../styles/components/TripForm.css';
@@ -18,6 +18,7 @@ export const TripForm: React.FC<TripFormProps> = ({ initialTrip, onSubmit, onCan
   const [startDate, setStartDate] = useState(initialTrip?.startDate || '');
   const [endDate, setEndDate] = useState(initialTrip?.endDate || '');
   const [notes, setNotes] = useState(initialTrip?.notes || '');
+  const [activities, setActivities] = useState<Activity[]>(initialTrip?.activities || []);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -26,20 +27,45 @@ export const TripForm: React.FC<TripFormProps> = ({ initialTrip, onSubmit, onCan
       destination,
       startDate,
       endDate,
-      activities: initialTrip?.activities || [],
+      activities,
       notes
     });
 
     if (!initialTrip)
-    setDestination('');
+      setDestination('');
     setStartDate('');
     setEndDate('');
     setNotes('');
+    setActivities([]);
   };
 
   const handleLocationSelect = (loc: { name: string }) => {
     setDestination(loc.name);
 
+  };
+
+  const addActivity = () => {
+    setActivities([...activities, {
+      name: '',
+      date: '',
+      time: '',
+      location: '',
+      notes: ''
+    }]);
+  };
+
+  const updateActivity = (index: number, field: keyof Activity, value: string) => {
+    const updatedActivities = activities.map((activity, i) => {
+      if (i === index) {
+        return { ...activity, [field]: value };
+      }
+      return activity;
+    });
+    setActivities(updatedActivities);
+  };
+
+  const removeActivity = (index: number) => {
+    setActivities(activities.filter((_, i) => i !== index));
   };
 
   return (
@@ -108,6 +134,95 @@ export const TripForm: React.FC<TripFormProps> = ({ initialTrip, onSubmit, onCan
             rows={3}
             placeholder="Write or paste anything here"
           />
+        </div>
+
+        <div className="activities-section">
+          <div className="activities-header">
+            <h3 className="section-subtitle">Itinerary</h3>
+            <button
+              type="button"
+              onClick={addActivity}
+              className="add-activity-button"
+            >
+              <PlusCircle className="w-4 h-4" />
+              Add Activity
+            </button>
+          </div>
+
+          {activities.map((activity, index) => (
+            <div key={index} className="activity-form">
+              <div className="activity-header">
+                <h4>Activity {index + 1}</h4>
+                <button
+                  type="button"
+                  onClick={() => removeActivity(index)}
+                  className="remove-activity-button"
+                >
+                  <X className="w-4 h-4" />
+                </button>
+              </div>
+
+              <div className="activity-fields">
+                <div className="input-group">
+                  <label className="input-label">Name</label>
+                  <input
+                    type="text"
+                    value={activity.name}
+                    onChange={(e) => updateActivity(index, 'name', e.target.value)}
+                    className="input-field"
+                    placeholder="Activity name"
+                    required
+                  />
+                </div>
+
+                <div className="activity-datetime">
+                  <div className="input-group">
+                    <label className="input-label">Date</label>
+                    <input
+                      type="date"
+                      value={activity.date}
+                      onChange={(e) => updateActivity(index, 'date', e.target.value)}
+                      className="input-field"
+                      required
+                    />
+                  </div>
+                  <div className="input-group">
+                    <label className="input-label">Time</label>
+                    <input
+                      type="time"
+                      value={activity.time}
+                      onChange={(e) => updateActivity(index, 'time', e.target.value)}
+                      className="input-field"
+                      required
+                    />
+                  </div>
+                </div>
+
+                <div className="input-group">
+                  <label className="input-label">Location</label>
+                  <input
+                    type="text"
+                    value={activity.location}
+                    onChange={(e) => updateActivity(index, 'location', e.target.value)}
+                    className="input-field"
+                    placeholder="Activity location"
+                    required
+                  />
+                </div>
+
+                <div className="input-group">
+                  <label className="input-label">Notes</label>
+                  <textarea
+                    value={activity.notes}
+                    onChange={(e) => updateActivity(index, 'notes', e.target.value)}
+                    className="notes-field"
+                    rows={2}
+                    placeholder="Additional notes"
+                  />
+                </div>
+              </div>
+            </div>
+          ))}
         </div>
 
         <div className="flex gap-3">

@@ -10,13 +10,6 @@ interface TripListViewProps {
 }
 
 export const TripListView: React.FC<TripListViewProps> = ({ trips, onSelectTrip }) => {
-  const [selectedTrip, setSelectedTrip] = useState<Trip | null>(null);
-  const [editingTrip, setEditingTrip] = useState<Trip | null>(null);
-
-  const handleTripClick = (trip: Trip) => {
-    setSelectedTrip(trip);
-    onSelectTrip(trip);
-  };
 
   return (
     <>
