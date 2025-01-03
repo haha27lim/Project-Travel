@@ -82,7 +82,6 @@ const Register: React.FC = () => {
             <Form>
               {!successful && (
                 <div>
-                  {/* Username Field */}
                   <div className="form-group">
                     <label htmlFor="username"> Username </label>
                     <Field name="username" type="text" className="form-control" />
@@ -93,7 +92,6 @@ const Register: React.FC = () => {
                     />
                   </div>
 
-                  {/* Email Field */}
                   <div className="form-group">
                     <label htmlFor="email"> Email </label>
                     <Field name="email" type="email" className="form-control" />
@@ -104,7 +102,6 @@ const Register: React.FC = () => {
                     />
                   </div>
 
-                  {/* Password Field */}
                   <div className="form-group">
                     <label htmlFor="password"> Password </label>
                     <Field
@@ -119,7 +116,6 @@ const Register: React.FC = () => {
                     />
                   </div>
 
-                  {/* Submit Button */}
                   <div className="form-group">
                     <button type="submit" className="submit-button">
                       <UserPlus className="button-icon" />
@@ -133,7 +129,6 @@ const Register: React.FC = () => {
                 </div>
               )}
 
-              {/* Success/Error Message */}
               {message && (
                 <div className="form-group">
                   <div

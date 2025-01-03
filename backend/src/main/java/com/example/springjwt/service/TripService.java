@@ -57,6 +57,7 @@ public class TripService {
             existingTrip.setEndDate(trip.getEndDate());
             existingTrip.setNotes(trip.getNotes());
             existingTrip.setActivities(trip.getActivities());
+            existingTrip.setPlaces(trip.getPlaces());
             
             return tripRepository.save(existingTrip);
         } else {

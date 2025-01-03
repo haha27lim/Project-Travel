@@ -4,27 +4,11 @@ import { useAuth } from "../contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { Trip } from "../types/trip";
-import { TripList } from "./TripList";
 import { TripListView } from "./TripListView";
 import { tripApi } from "../services/api";
 
-const Home: React.FC = () => {
-  // const [content, setContent] = useState<string>("");
 
-  // useEffect(() => {
-  //   UserService.getPublicContent().then(
-  //     (response) => {
-  //       setContent(response.data);
-  //     },
-  //     (error) => {
-  //       setContent(
-  //         (error.response && error.response.data) ||
-  //           error.message ||
-  //           error.toString()
-  //       );
-  //     }
-  //   );
-  // }, []);
+const Home: React.FC = () => {
 
   const { currentUser } = useAuth();
   const navigate = useNavigate();
@@ -68,7 +52,7 @@ const Home: React.FC = () => {
         <div className="hero-content">
           <h1 className="hero-title">Plan Your Dream Journey</h1>
           <p className="hero-description">
-            Create detailed travel itineraries, organize activities, and make your travel dreams come true with our intuitive planning tools.
+            Create detailed travel itineraries, organise activities, and make your travel dreams come true with our intuitive planning tools.
           </p>
           <button
             onClick={handleStartPlanning}
@@ -106,7 +90,7 @@ const Home: React.FC = () => {
               </div>
               <h3 className="feature-title">Interactive Maps</h3>
               <p className="feature-description">
-                Visualize your journey with interactive maps and location planning.
+                Visualise your journey with interactive maps and location planning.
               </p>
             </div>
 
@@ -116,7 +100,7 @@ const Home: React.FC = () => {
               </div>
               <h3 className="feature-title">Smart Scheduling</h3>
               <p className="feature-description">
-                Organize your activities with our intuitive calendar system.
+                Organise your activities with our intuitive calendar system.
               </p>
             </div>
 

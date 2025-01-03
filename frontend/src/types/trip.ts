@@ -4,6 +4,7 @@ export interface Trip {
     startDate: string;
     endDate: string;
     activities?: Activity[];
+    places?: Place[];
     notes: string;
 }
 
@@ -14,4 +15,11 @@ export interface Activity {
     time: string;
     location: string;
     notes: string;
-  }
+}
+
+export interface Place {
+    id?: number;
+    name: string;
+    notes: string;
+    imageUrl?: string;
+}

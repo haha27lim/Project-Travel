@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { Trip } from "../types/trip";
-import { Clock, FileText, MapPin, Pencil, Trash2, ArrowLeft } from 'lucide-react';
+import { Place, Trip } from "../types/trip";
+import { Clock, FileText, MapPin, Pencil, Trash2, ArrowLeft, PlusCircle } from 'lucide-react';
 import { tripApi } from '../services/api';
 import '../styles/components/TripDetails.css';
 import { TripForm } from './TripForm';
@@ -59,6 +59,29 @@ export const TripDetails: React.FC = () => {
         navigate('/dashboard');
       } catch (err) {
         console.error('Error deleting trip:', err);
+      }
+    }
+  };
+
+  const handleEditPlace = (place: Place) => {
+    setIsEditing(true);
+    // You can add specific logic for editing a single place
+  };
+  
+  const handleDeletePlace = async (placeId: number) => {
+    if (window.confirm('Are you sure you want to delete this place?')) {
+      try {
+        // Add your API call to delete the place
+        // Update the trip state to remove the deleted place
+        setTrip(prev => {
+          if (!prev) return prev;
+          return {
+            ...prev,
+            places: prev.places?.filter(p => p.id !== placeId) || []
+          };
+        });
+      } catch (err) {
+        console.error('Error deleting place:', err);
       }
     }
   };
@@ -123,6 +146,60 @@ export const TripDetails: React.FC = () => {
               Notes
             </h3>
             <p className="text-gray-600 whitespace-pre-line">{trip.notes}</p>
+          </div>
+        )}
+
+        {trip.places && trip.places.length > 0 && (
+          <div className="border-t pt-4 mt-4">
+            <div className="flex justify-between items-center mb-4">
+              <h3 className="text-lg font-semibold flex items-center gap-2">
+                <MapPin className="w-5 h-5 text-blue-500" />
+                Places to Visit
+              </h3>
+              <button
+                onClick={() => setIsEditing(true)}
+                className="add-place-button"
+                title="Add new place"
+              >
+                <PlusCircle className="w-4 h-4" />
+                Add Place
+              </button>
+            </div>
+            <div className="places-grid">
+              {trip.places.map((place, index) => (
+                <div key={index} className="place-card">
+                  <div className="place-header">
+                    <h4 className="place-name">{place.name}</h4>
+                    <div className="place-actions">
+                      <button
+                        onClick={() => handleEditPlace(place)}
+                        className="place-action-btn edit"
+                        title="Edit place"
+                      >
+                        <Pencil className="w-4 h-4" />
+                      </button>
+                      <button
+                        onClick={() => handleDeletePlace(place.id!)}
+                        className="place-action-btn delete"
+                        title="Delete place"
+                      >
+                        <Trash2 className="w-4 h-4" />
+                      </button>
+                    </div>
+                  </div>
+                  {place.notes && (
+                    <p className="place-notes">{place.notes}</p>
+                  )}
+                  {place.imageUrl && (
+                    <img
+                      src={place.imageUrl}
+                      alt={place.name}
+                      className="place-image"
+                    />
+                  )}
+                </div>
+              ))}
+            </div>
           </div>
         )}
 

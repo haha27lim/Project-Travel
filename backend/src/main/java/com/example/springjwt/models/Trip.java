@@ -39,8 +39,12 @@ public class Trip {
     private String notes;
     
     @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn(name = "trip_id")  // Foreign key column in the "activities" table
+    @JoinColumn(name = "trip_id")
     private List<Activity> activities = new ArrayList<>();
+    
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "trip_id")
+    private List<Place> places = new ArrayList<>();
     
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import { Activity, Trip } from "../types/trip";
-import { MapPin, PlusCircle, X } from "lucide-react";
+import { Activity, Trip, Place } from "../types/trip";
+import { FileText, MapPin, PlusCircle, Trash2, X } from "lucide-react";
 import { InteractiveMap } from './Map/InteractiveMap';
 import '../styles/components/TripForm.css';
 
@@ -19,6 +19,8 @@ export const TripForm: React.FC<TripFormProps> = ({ initialTrip, onSubmit, onCan
   const [endDate, setEndDate] = useState(initialTrip?.endDate || '');
   const [notes, setNotes] = useState(initialTrip?.notes || '');
   const [activities, setActivities] = useState<Activity[]>(initialTrip?.activities || []);
+  const [places, setPlaces] = useState<Place[]>(initialTrip?.places || []);
+  const [expandedPlaces, setExpandedPlaces] = useState<number[]>([]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -28,6 +30,7 @@ export const TripForm: React.FC<TripFormProps> = ({ initialTrip, onSubmit, onCan
       startDate,
       endDate,
       activities,
+      places,
       notes
     });
 
@@ -37,6 +40,7 @@ export const TripForm: React.FC<TripFormProps> = ({ initialTrip, onSubmit, onCan
     setEndDate('');
     setNotes('');
     setActivities([]);
+    setPlaces([])
   };
 
   const handleLocationSelect = (loc: { name: string }) => {
@@ -54,6 +58,14 @@ export const TripForm: React.FC<TripFormProps> = ({ initialTrip, onSubmit, onCan
     }]);
   };
 
+  const addPlace = () => {
+    setPlaces([...places, {
+      name: '',
+      notes: '',
+      imageUrl: ''
+    }]);
+  };
+
   const updateActivity = (index: number, field: keyof Activity, value: string) => {
     const updatedActivities = activities.map((activity, i) => {
       if (i === index) {
@@ -64,8 +76,26 @@ export const TripForm: React.FC<TripFormProps> = ({ initialTrip, onSubmit, onCan
     setActivities(updatedActivities);
   };
 
+  const updatePlace = (index: number, field: keyof Place, value: string) => {
+    const newPlaces = [...places];
+    newPlaces[index] = { ...newPlaces[index], [field]: value };
+    setPlaces(newPlaces);
+  };
+
   const removeActivity = (index: number) => {
     setActivities(activities.filter((_, i) => i !== index));
+  };
+
+  const removePlace = (index: number) => {
+    setPlaces(places.filter((_, i) => i !== index));
+  };
+
+  const togglePlaceExpansion = (index: number) => {
+    setExpandedPlaces(prev =>
+      prev.includes(index)
+        ? prev.filter(i => i !== index)
+        : [...prev, index]
+    );
   };
 
   return (
@@ -135,6 +165,60 @@ export const TripForm: React.FC<TripFormProps> = ({ initialTrip, onSubmit, onCan
             placeholder="Write or paste anything here"
           />
         </div>
+
+        <div className="input-group">
+          <label className="input-label">Places to Visit</label>
+          <button type="button" onClick={addPlace} className="add-button">
+            <PlusCircle size={20} /> Add a place
+          </button>
+        </div>
+        {places.map((place, index) => (
+          <div key={index} className="place-item">
+            <div className="place-basic-info">
+              <input
+                type="text"
+                placeholder="Place name"
+                value={place.name}
+                onChange={(e) => updatePlace(index, 'name', e.target.value)}
+                required
+              />
+              <div className="place-actions">
+                <button
+                  type="button"
+                  onClick={() => togglePlaceExpansion(index)}
+                  className="expand-button"
+                  title={expandedPlaces.includes(index) ? 'Hide details' : 'Add note'}
+                >
+                   <FileText size={18} />
+                </button>
+                <button
+                  type="button"
+                  onClick={() => removePlace(index)}
+                  className="remove-button"
+                  title="Remove place"
+                >
+                  <Trash2 size={18} />
+                </button>
+              </div>
+            </div>
+
+            {expandedPlaces.includes(index) && (
+              <div className="place-details">
+                <textarea
+                  placeholder="Notes"
+                  value={place.notes}
+                  onChange={(e) => updatePlace(index, 'notes', e.target.value)}
+                />
+                <input
+                  type="url"
+                  placeholder="Image URL (optional)"
+                  value={place.imageUrl}
+                  onChange={(e) => updatePlace(index, 'imageUrl', e.target.value)}
+                />
+              </div>
+            )}
+          </div>
+        ))}
 
         <div className="activities-section">
           <div className="activities-header">
