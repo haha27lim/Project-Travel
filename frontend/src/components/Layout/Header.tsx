@@ -12,18 +12,18 @@ export const Header: React.FC = () => {
 
     useEffect(() => {
         const user = AuthService.getCurrentUser();
-    
+
         if (user) {
-          setCurrentUser(user);
-          setShowAdminBoard(user.roles.includes("ROLE_ADMIN"));
+            setCurrentUser(user);
+            setShowAdminBoard(user.roles.includes("ROLE_ADMIN"));
         }
-    
+
         EventBus.on("logout", logOut);
-    
+
         return () => {
-          EventBus.remove("logout", logOut);
+            EventBus.remove("logout", logOut);
         };
-      }, []);
+    }, []);
 
     const logOut = () => {
         AuthService.logout();
@@ -45,31 +45,24 @@ export const Header: React.FC = () => {
                         </div>
                     </Link>
 
-                    {showAdminBoard && (
-                        <li className="nav-item">
-                            <Link to={"/admin"} className="nav-link">
-                                Admin Board
-                            </Link>
-                        </li>
-                    )}
 
-                    {currentUser && (
-                        <li className="nav-item">
-                            <Link to={"/user"} className="nav-link">
-                                User
-                            </Link>
-                        </li>
-                    )}
 
 
                     <div className="nav-buttons">
                         <Link to={"/home"} className="nav-link">
                             Home
                         </Link>
-                        
+
+                        {showAdminBoard && (
+                            <Link to={"/admin"} className="nav-link">
+                                Admin Board
+                            </Link>
+                        )}
+
                         {currentUser ? (
                             <>
                                 <Link to="/dashboard" className="nav-link">Dashboard</Link>
+                                <Link to={"/user"} className="nav-link">User</Link>
                                 <Link to="/profile" className="welcome-text">Welcome, {currentUser.username}</Link>
                                 <button onClick={logOut} className="logout-button">
                                     <LogIn className="button-icon" />

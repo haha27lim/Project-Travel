@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { Place, Trip } from "../types/trip";
+import { Activity, Place, Trip } from "../types/trip";
 import { Clock, FileText, MapPin, Pencil, Trash2, ArrowLeft, PlusCircle } from 'lucide-react';
 import { tripApi } from '../services/api';
 import '../styles/components/TripDetails.css';
@@ -116,6 +116,30 @@ export const TripDetails: React.FC = () => {
         console.error('Error deleting place:', err);
       }
     }
+  };
+
+  const groupActivitiesByDate = (activities: Activity[]) => {
+    // Sort activities by date and time
+    const sorted = [...activities].sort((a, b) => {
+      const dateCompare = new Date(a.date).getTime() - new Date(b.date).getTime();
+      if (dateCompare === 0) {
+        return a.time.localeCompare(b.time);
+      }
+      return dateCompare;
+    });
+
+    // Group by date
+    const grouped = sorted.reduce((acc, activity) => {
+      const date = new Date(activity.date);
+      const dateStr = date.toISOString().split('T')[0];
+      if (!acc[dateStr]) {
+        acc[dateStr] = [];
+      }
+      acc[dateStr].push(activity);
+      return acc;
+    }, {} as Record<string, Activity[]>);
+
+    return grouped;
   };
 
   if (isEditing && trip) {
@@ -252,14 +276,41 @@ export const TripDetails: React.FC = () => {
 
         {trip.activities && trip.activities.length > 0 && (
           <div className="trip-activities">
-            <h3>Itinerary</h3>
-            {trip.activities.map((activity) => (
-              <div key={activity.id} className="activity-item">
-                <h4>{activity.name}</h4>
-                <div className="activity-details">
-                  <p><Clock className="icon" /> {activity.date} at {activity.time}</p>
-                  <p><MapPin className="icon" /> {activity.location}</p>
-                  {activity.notes && <p>{activity.notes}</p>}
+            <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
+              <Clock className="w-5 h-5 text-blue-500" />
+              Itinerary
+            </h3>
+            {Object.entries(groupActivitiesByDate(trip.activities)).map(([date, activities]) => (
+              <div key={date} className="mb-6">
+                <div className="date-header mb-3">
+                  <h4 className="text-md font-semibold text-gray-700">
+                    {new Date(date).toLocaleDateString('en-US', {
+                      weekday: 'long',
+                      year: 'numeric',
+                      month: 'long',
+                      day: 'numeric'
+                    })}
+                  </h4>
+                </div>
+                <div className="activities-list">
+                  {activities.map((activity) => (
+                    <div key={activity.id} className="activity-item">
+                      <div className="activity-time text-blue-600 font-medium">
+                        {activity.time}
+                      </div>
+                      <div className="activity-content">
+                        <h5 className="activity-name font-semibold">{activity.name}</h5>
+                        <div className="activity-details">
+                          <p className="flex items-center gap-2">
+                            <MapPin className="icon" /> {activity.location}
+                          </p>
+                          {activity.notes && (
+                            <p className="activity-notes text-gray-600">{activity.notes}</p>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  ))}
                 </div>
               </div>
             ))}
