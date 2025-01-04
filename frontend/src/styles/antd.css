@@ -1,0 +1,23 @@
+@import 'antd/dist/reset.css';
+
+/* Custom Ant Design overrides can go here */
+.ant-layout {
+  min-height: 100vh;
+}
+
+.ant-layout-header {
+  padding: 0 24px;
+}
+
+.ant-card {
+  margin-bottom: 16px;
+}
+
+.ant-statistic {
+  text-align: center;
+}
+
+.ant-table {
+  background: white;
+  margin-top: 16px;
+} 
