@@ -219,3 +219,41 @@
     grid-template-columns: repeat(2, 1fr);
   }
 } 
+
+.dashboard-card.ai-assistant {
+  grid-column: span 2;
+  background: linear-gradient(to right, rgba(99, 102, 241, 0.05), rgba(168, 85, 247, 0.05));
+  border: 1px solid rgba(99, 102, 241, 0.2);
+}
+
+.ai-assistant .card-header {
+  color: #4F46E5;
+}
+
+.ai-assistant .card-icon {
+  color: #6366F1;
+}
+
+.ai-assistant .card-content {
+  max-height: 800px;
+  overflow-y: auto;
+  padding-right: 1rem;
+}
+
+.ai-assistant .card-content::-webkit-scrollbar {
+  width: 6px;
+}
+
+.ai-assistant .card-content::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.05);
+  border-radius: 3px;
+}
+
+.ai-assistant .card-content::-webkit-scrollbar-thumb {
+  background: rgba(99, 102, 241, 0.3);
+  border-radius: 3px;
+}
+
+.ai-assistant .card-content::-webkit-scrollbar-thumb:hover {
+  background: rgba(99, 102, 241, 0.5);
+} 

@@ -14,6 +14,7 @@ import { AuthProvider } from './contexts/AuthContext';
 import { Dashboard } from './components/Dashboard';
 import { TripDetails } from './components/TripDetails';
 import SavedPlaces from "./components/SavedPlaces";
+import AITravelPlannerPage from "./components/AI/AITravelPlannerPage";
 
 function App() {
 
@@ -32,6 +33,7 @@ function App() {
             <Route path="/dashboard" element={<Dashboard />}/>
             <Route path="/trips/:id" element={<TripDetails />} />
             <Route path="/places/saved" element={<SavedPlaces />} />
+            <Route path="/ai-planner" element={<AITravelPlannerPage />} />
           </Routes>
       </BrowserRouter>
     </AuthProvider>

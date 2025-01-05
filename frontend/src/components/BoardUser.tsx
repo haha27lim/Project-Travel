@@ -2,10 +2,11 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import TripService from "../services/trip.service";
 import EventBus from "../common/EventBus";
-import { Calendar, MapPin, Clock, Plus, Activity } from "lucide-react";
+import { Calendar, MapPin, Clock, Plus, Activity, Sparkles } from "lucide-react";
 import "../styles/components/BoardUser.css";
 import { Trip } from "../types/trip.type";
 import { AxiosError } from "axios";
+import ItineraryGenerator from './AI/ItineraryGenerator';
 
 export const BoardUser: React.FC = () => {
   const [upcomingTrips, setUpcomingTrips] = useState<Trip[]>([]);
@@ -157,6 +158,17 @@ export const BoardUser: React.FC = () => {
               <MapPin className="action-icon" />
               <span>Saved Places</span>
             </Link>
+          </div>
+        </div>
+
+        {/* AI Travel Assistant Card */}
+        <div className="dashboard-card ai-assistant">
+          <div className="card-header">
+            <Sparkles className="card-icon" />
+            <h2>AI Travel Assistant</h2>
+          </div>
+          <div className="card-content">
+            <ItineraryGenerator />
           </div>
         </div>
       </div>

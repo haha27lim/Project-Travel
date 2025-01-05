@@ -1,7 +1,7 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../../contexts/AuthContext";
 import AuthService from "../../services/auth.service";
-import { Compass, LogIn, UserPlus } from "lucide-react";
+import { Compass, LogIn, UserPlus, Sparkles } from "lucide-react";
 import '../../styles/components/Header.css';
 import { useEffect } from "react";
 import EventBus from "../../common/EventBus";
@@ -45,13 +45,21 @@ export const Header: React.FC = () => {
                         </div>
                     </Link>
 
-
-
-
                     <div className="nav-buttons">
                         <Link to={"/home"} className="nav-link">
                             Home
                         </Link>
+
+                        {currentUser && (
+                            <>
+                                <Link to="/dashboard" className="nav-link">Trip Planner</Link>
+                                <Link to="/ai-planner" className="nav-link">
+                                    AI Planner
+                                </Link>
+                                <Link to={"/user"} className="nav-link">User</Link>
+                                <Link to="/profile" className="nav-link">Profile</Link>
+                            </>
+                        )}
 
                         {showAdminBoard && (
                             <Link to={"/admin"} className="nav-link">
@@ -60,15 +68,10 @@ export const Header: React.FC = () => {
                         )}
 
                         {currentUser ? (
-                            <>
-                                <Link to="/dashboard" className="nav-link">Trip Planner</Link>
-                                <Link to={"/user"} className="nav-link">User</Link>
-                                <Link to="/profile" className="nav-link">Profile</Link>
-                                <button onClick={logOut} className="logout-button">
-                                    <LogIn className="button-icon" />
-                                    Logout
-                                </button>
-                            </>
+                            <button onClick={logOut} className="logout-button">
+                                <LogIn className="button-icon" />
+                                Logout
+                            </button>
                         ) : (
                             <>
                                 <Link to="/login" className="login-button">
