@@ -109,7 +109,6 @@ public class EmailService {
             
             logger.debug("Creating email content...");
             
-            // Convert the itinerary text to HTML with proper line breaks and formatting
             String formattedItinerary = itinerary.lines()
                 .map(line -> {
                     if (line.trim().isEmpty()) {

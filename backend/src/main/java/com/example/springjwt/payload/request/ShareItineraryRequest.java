@@ -18,7 +18,6 @@ public class ShareItineraryRequest {
     @Email
     private String recipientEmail;
 
-    // Getters and setters
     public String getDestination() {
         return destination;
     }
