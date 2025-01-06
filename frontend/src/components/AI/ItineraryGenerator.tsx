@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import aiService, { ItineraryRequest } from '../../services/ai.service';
 import '../../styles/components/ItineraryGenerator.css';
+import { Mail } from 'lucide-react';
 
 const ItineraryGenerator: React.FC = () => {
     const [destination, setDestination] = useState('');
@@ -10,6 +11,10 @@ const ItineraryGenerator: React.FC = () => {
     const [itinerary, setItinerary] = useState<string | null>(null);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
+    const [isSharing, setIsSharing] = useState(false);
+    const [recipientEmail, setRecipientEmail] = useState('');
+    const [shareError, setShareError] = useState<string | null>(null);
+    const [shareSuccess, setShareSuccess] = useState(false);
 
     const formatItinerary = (text: string): string => {
         // Remove markdown symbols and clean up the text
@@ -42,11 +47,30 @@ const ItineraryGenerator: React.FC = () => {
         }
     };
 
+    const handleShare = async (e: React.FormEvent) => {
+        e.preventDefault();
+        if (!itinerary) return;
+
+        try {
+            setLoading(true);
+            setShareError(null);
+            await aiService.shareItinerary(destination, days, itinerary, recipientEmail);
+            setShareSuccess(true);
+            setIsSharing(false);
+            setRecipientEmail('');
+        } catch (err) {
+            setShareError('Failed to share itinerary. Please try again.');
+            console.error(err);
+        } finally {
+            setLoading(false);
+        }
+    };
+
     return (
         <div className="itinerary-generator">
             <form onSubmit={handleSubmit} className="itinerary-form">
                 <div className="form-group">
-                    <label className="form-label">Destination</label>
+                    <label className="form-label" style={{ color: 'darkblue'}}>Destination</label>
                     <input
                         type="text"
                         value={destination}
@@ -58,7 +82,7 @@ const ItineraryGenerator: React.FC = () => {
                 </div>
 
                 <div className="form-group">
-                    <label className="form-label">Number of Days</label>
+                    <label className="form-label" style={{ color: 'darkblue'}}>Number of Days</label>
                     <input
                         type="number"
                         value={days}
@@ -71,7 +95,7 @@ const ItineraryGenerator: React.FC = () => {
                 </div>
 
                 <div className="form-group">
-                    <label className="form-label">Travel Preferences (Optional)</label>
+                    <label className="form-label" style={{ color: 'darkblue'}}>Travel Preferences (Optional)</label>
                     <textarea
                         value={preferences}
                         onChange={(e) => setPreferences(e.target.value)}
@@ -81,7 +105,7 @@ const ItineraryGenerator: React.FC = () => {
                 </div>
 
                 <div className="form-group">
-                    <label className="form-label">Budget</label>
+                    <label className="form-label" style={{ color: 'darkblue'}}>Budget</label>
                     <select
                         value={budget}
                         onChange={(e) => setBudget(e.target.value)}
@@ -108,14 +132,22 @@ const ItineraryGenerator: React.FC = () => {
 
             {itinerary && (
                 <div className="itinerary-result">
-                    <h3 className="itinerary-title">Your Personalised Itinerary: {destination} ({days} days trip)</h3>
+                    <div className="itinerary-header">
+                        <h3 className="itinerary-title">Your Personalised Itinerary: {destination} ({days} days trip)</h3>
+                        <button
+                            onClick={() => setIsSharing(true)}
+                            className="share-button"
+                            disabled={loading}
+                        >
+                            <Mail className="w-4 h-4 mr-2" />
+                            Share via Email
+                        </button>
+                    </div>
                     <div className="itinerary-content">
                         {itinerary.split('\n').map((line, index) => {
                             const isNewDay = line.toLowerCase().includes("day");
-
                             return (
                                 <React.Fragment key={index}>
-                                    {/* Insert <hr> if it's a new day */}
                                     {isNewDay && index > 0 && <hr />}
                                     <p className={`itinerary-line ${line.includes(':') ? 'itinerary-heading' : ''}`}>
                                         {line}
@@ -127,6 +159,46 @@ const ItineraryGenerator: React.FC = () => {
                 </div>
             )}
 
+            {isSharing && (
+                <div className="modal-overlay">
+                    <div className="modal-content">
+                        <h3 className="modal-title">Share Itinerary</h3>
+                        <form onSubmit={handleShare} className="share-form">
+                            <div className="form-group">
+                                <label htmlFor="email" className="form-label">Recipient's Email</label>
+                                <input
+                                    type="email"
+                                    id="email"
+                                    value={recipientEmail}
+                                    onChange={(e) => setRecipientEmail(e.target.value)}
+                                    className="form-input"
+                                    placeholder="Enter email address"
+                                    required
+                                />
+                            </div>
+                            {shareError && <div className="error-message">{shareError}</div>}
+                            {shareSuccess && <div className="success-message">Itinerary shared successfully!</div>}
+                            <div className="modal-actions">
+                                <button
+                                    type="button"
+                                    onClick={() => setIsSharing(false)}
+                                    className="cancel-button"
+                                    disabled={loading}
+                                >
+                                    Cancel
+                                </button>
+                                <button
+                                    type="submit"
+                                    className="share-submit-button"
+                                    disabled={loading}
+                                >
+                                    {loading ? 'Sharing...' : 'Share'}
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            )}
         </div>
     );
 };

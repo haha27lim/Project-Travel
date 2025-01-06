@@ -11,7 +11,7 @@ const AITravelPlannerPage: React.FC = () => {
                     <div className="title-wrapper">
                         <Sparkles className="title-icon" />
                         <h1 className="page-title">
-                            AI Travel Planner
+                            AI Smart Travel Planner
                         </h1>
                     </div>
                     <div className="features-list">
@@ -26,7 +26,7 @@ const AITravelPlannerPage: React.FC = () => {
                     </div>
                     <p className="page-description">
                         Let our AI assistant help you create the perfect travel itinerary tailored to your preferences.
-                        Get personalized recommendations for activities, restaurants, and must-see attractions.
+                        Get personalised recommendations for activities, restaurants, and must-see attractions.
                     </p>
                 </div>
                 <div className="ai-planner-content">

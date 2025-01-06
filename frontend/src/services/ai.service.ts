@@ -42,8 +42,19 @@ const generateItinerary = async (request: ItineraryRequest): Promise<string> => 
     return response.data;
 };
 
+const shareItinerary = async (destination: string, days: number, itinerary: string, recipientEmail: string): Promise<void> => {
+    const response = await instance.post('/ai/share-itinerary', {
+        destination,
+        days,
+        itinerary,
+        recipientEmail
+    });
+    return response.data;
+};
+
 const aiService = {
-    generateItinerary
+    generateItinerary,
+    shareItinerary
 };
 
 export default aiService; 
