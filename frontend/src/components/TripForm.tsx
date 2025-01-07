@@ -277,7 +277,7 @@ export const TripForm: React.FC<TripFormProps> = ({ initialTrip, onSubmit, onCan
                       value={activity.time}
                       onChange={(e) => updateActivity(index, 'time', e.target.value)}
                       className="input-field"
-                      required
+                      required                      
                     />
                   </div>
                 </div>
@@ -289,8 +289,7 @@ export const TripForm: React.FC<TripFormProps> = ({ initialTrip, onSubmit, onCan
                     value={activity.location}
                     onChange={(e) => updateActivity(index, 'location', e.target.value)}
                     className="input-field"
-                    placeholder="Activity location"
-                    required
+                    placeholder="Activity location"                    
                   />
                 </div>
 

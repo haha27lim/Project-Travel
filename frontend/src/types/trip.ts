@@ -13,7 +13,7 @@ export interface Activity {
     name: string;
     date: string;
     time: string;
-    location: string;
+    location?: string;
     notes: string;
 }
 

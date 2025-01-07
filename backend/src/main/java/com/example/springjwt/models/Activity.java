@@ -18,12 +18,12 @@ public class Activity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;  // Auto-generated ID
+    private Long id;
 
     private String name;
     private String date;
     private String time;
-    private String location;
+    private String location = null;
     private String notes;
 
 }

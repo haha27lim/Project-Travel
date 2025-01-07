@@ -122,7 +122,7 @@ export const TripDetails: React.FC = () => {
   };
 
   const groupActivitiesByDate = (activities: Activity[]) => {
-    // Sort activities by date and time
+    
     const sorted = [...activities].sort((a, b) => {
       const dateCompare = new Date(a.date).getTime() - new Date(b.date).getTime();
       if (dateCompare === 0) {
@@ -131,7 +131,7 @@ export const TripDetails: React.FC = () => {
       return dateCompare;
     });
 
-    // Group by date
+    
     const grouped = sorted.reduce((acc, activity) => {
       const date = new Date(activity.date);
       const dateStr = date.toISOString().split('T')[0];

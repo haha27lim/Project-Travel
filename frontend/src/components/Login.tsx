@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Formik, Field, Form, ErrorMessage } from "formik";
 import * as Yup from "yup";
 
@@ -14,15 +14,18 @@ const Login: React.FC = () => {
   const [message, setMessage] = useState<string>("");
   const { setCurrentUser, setShowAdminBoard } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
   const [isForgotPasswordOpen, setIsForgotPasswordOpen] = useState(false);
 
+  const searchParams = new URLSearchParams(location.search);
+  const returnUrl = searchParams.get('returnUrl') || '/profile';
 
   useEffect(() => {
     const currentUser = AuthService.getCurrentUser();
     if (currentUser) {
-      navigate("/profile");
+      navigate(returnUrl);
     }
-  }, []);
+  }, [returnUrl]);
 
   const validationSchema = Yup.object().shape({
     username: Yup.string().required("This field is required!"),
@@ -39,7 +42,7 @@ const Login: React.FC = () => {
       (response) => {
         setCurrentUser(response);
         setShowAdminBoard(response.roles.includes("ROLE_ADMIN"));
-        navigate("/profile");
+        navigate(returnUrl);
       },
       (error) => {
         const resMessage =

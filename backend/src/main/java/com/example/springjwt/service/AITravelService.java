@@ -34,13 +34,17 @@ public class AITravelService {
             String prompt = String.format(
                 "Create a detailed %d-day travel itinerary for %s. " +
                 "Preferences: %s. Budget: %s. " +
+                "Ensure the itinerary balances travel time, costs, and user preferences by: " +
+                "- Minimizing unnecessary travel time between activities and locations.\n" +
+                "- Prioritizing activities and restaurants that fit within the specified budget.\n" +
+                "- Including a mix of activities that align with the user's preferences (e.g., %s).\n" +
                 "Format the response with day-by-day breakdown, including: " +
                 "- Morning activities\n" +
                 "- Afternoon activities\n" +
                 "- Evening activities\n" +
                 "- Recommended restaurants\n" +
-                "- Estimated costs\n" +
-                "- Travel tips",
+                "- Estimated costs for each day\n" +
+                "- Travel tips to optimize time and budget",
                 days, destination, preferences, budget
             );
             
