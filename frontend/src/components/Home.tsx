@@ -14,7 +14,7 @@ const Home: React.FC = () => {
   const { currentUser } = useAuth();
   const navigate = useNavigate();
   const [trips, setTrips] = useState<Trip[]>([]);
-  const [selectedTrip, setSelectedTrip] = useState<Trip | null>(null);
+  const [, setSelectedTrip] = useState<Trip | null>(null);
 
   const handleStartPlanning = () => {
     if (currentUser) {

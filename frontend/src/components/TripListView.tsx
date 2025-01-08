@@ -1,8 +1,7 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Trip } from "../types/trip";
 import { TripCard } from './TripCard';
 import '../styles/components/TripList.css';
-import { TripDetails } from './TripDetails';
 
 interface TripListViewProps {
   trips: Trip[];

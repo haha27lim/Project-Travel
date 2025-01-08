@@ -1,7 +1,7 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../../contexts/AuthContext";
 import AuthService from "../../services/auth.service";
-import { Compass, LogIn, UserPlus, Sparkles } from "lucide-react";
+import { Compass, LogIn, UserPlus } from "lucide-react";
 import '../../styles/components/Header.css';
 import { useEffect } from "react";
 import EventBus from "../../common/EventBus";

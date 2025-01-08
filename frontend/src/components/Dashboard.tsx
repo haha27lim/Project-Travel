@@ -7,7 +7,7 @@ import '../styles/components/Dashboard.css';
 
 export const Dashboard: React.FC = () => {
   const [trips, setTrips] = useState<Trip[]>([]);
-  const [selectedTrip, setSelectedTrip] = useState<Trip | null>(null);
+  const [, setSelectedTrip] = useState<Trip | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 

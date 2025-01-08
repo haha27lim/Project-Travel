@@ -15,7 +15,7 @@ interface TripCardProps {
   viewOnly?: boolean;
 }
 
-export const TripCard: React.FC<TripCardProps> = ({ trip, onSelect, onEdit, onDelete, viewOnly = false }) => {
+export const TripCard: React.FC<TripCardProps> = ({ trip, onEdit, onDelete, viewOnly = false }) => {
   const navigate = useNavigate();
 
   const handleClick = () => {
