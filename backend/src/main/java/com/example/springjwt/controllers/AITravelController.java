@@ -6,7 +6,6 @@ import org.springframework.web.bind.annotation.*;
 
 import com.example.springjwt.service.AITravelService;
 import com.example.springjwt.service.EmailService;
-import com.example.springjwt.models.Trip;
 import com.example.springjwt.payload.response.MessageResponse;
 import com.example.springjwt.payload.request.ShareItineraryRequest;
 
