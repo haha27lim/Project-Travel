@@ -1,19 +1,13 @@
-FROM openjdk:17-oracle AS build
-
-# Set the working directory inside the container
+FROM maven:3.8.4-openjdk-17 AS build
 WORKDIR /app
+COPY pom.xml .
+COPY src ./src
+RUN mvn clean package -DskipTests
 
-# Create a non-root user to run app as (instead of root)
+FROM openjdk:17-oracle
+WORKDIR /app
+COPY --from=build /app/target/*.jar app.jar
 RUN groupadd app && useradd -g app -s /bin/bash -m app
-
-# Copy the jar file into the docker image
-COPY target/*.jar app.jar
-
-# Change ownership of the jar file to the app user
 RUN chown app:app /app/app.jar
-
-# Switch to non-root user
 USER app
-
-# Run the jar file
 ENTRYPOINT ["java", "-jar", "/app/app.jar"]
