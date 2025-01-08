@@ -15,7 +15,7 @@ const Login: React.FC = () => {
   const { setCurrentUser, setShowAdminBoard } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
-  const [isForgotPasswordOpen, setIsForgotPasswordOpen] = useState(false);
+  const [, setIsForgotPasswordOpen] = useState(false);
 
   const searchParams = new URLSearchParams(location.search);
   const returnUrl = searchParams.get('returnUrl') || '/profile';
