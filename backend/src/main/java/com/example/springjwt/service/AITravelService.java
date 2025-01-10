@@ -30,6 +30,9 @@ public class AITravelService {
             ArrayNode contents = requestBody.putArray("contents");
             ObjectNode content = contents.addObject();
             ObjectNode parts = content.putArray("parts").addObject();
+
+            String safePreferences = preferences != null ? preferences : "standard tourist attractions";
+            String safeBudget = budget != null ? budget : "moderate";
             
             String prompt = String.format(
                 "Create a detailed %d-day travel itinerary for %s. " +
@@ -45,7 +48,7 @@ public class AITravelService {
                 "- Recommended restaurants\n" +
                 "- Estimated costs for each day\n" +
                 "- Travel tips to optimize time and budget",
-                days, destination, preferences, budget
+                days, destination, safePreferences, safeBudget, safePreferences
             );
             
             parts.put("text", prompt);
@@ -76,6 +79,7 @@ public class AITravelService {
                 .asText();
 
         } catch (Exception e) {
+            e.printStackTrace(); 
             throw new RuntimeException("Failed to generate itinerary: " + e.getMessage());
         }
     }
