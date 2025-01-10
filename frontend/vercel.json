@@ -1,6 +1,10 @@
 {
     "rewrites": [
       {
+        "source": "/api/:path*",
+        "destination": "https://project-travel-ww3y.onrender.com/api/:path*"
+      },
+      {
         "source": "/(.*)",
         "destination": "/"
       }
