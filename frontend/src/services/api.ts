@@ -12,7 +12,7 @@ const instance = axios.create({
     withCredentials: true
 });
 
-// Add response interceptor
+
 instance.interceptors.response.use(
     (response) => response,
     (error: AxiosError) => {

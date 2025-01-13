@@ -15,7 +15,6 @@ const Login: React.FC = () => {
   const { setCurrentUser, setShowAdminBoard } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
-  const [, setIsForgotPasswordOpen] = useState(false);
 
   const searchParams = new URLSearchParams(location.search);
   const returnUrl = searchParams.get('returnUrl') || '/profile';
@@ -97,13 +96,12 @@ const Login: React.FC = () => {
                   className="alert alert-danger"
                 />
               </div>
-              <button
-                type="button"
-                onClick={() => setIsForgotPasswordOpen(true)}
+              <Link
+                to="/forgot-password"
                 className="forgot-password-button"
               >
                 Forgot your password?
-              </button>
+              </Link>
 
               <div className="form-group">
                 <button

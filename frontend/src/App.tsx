@@ -17,6 +17,8 @@ import SavedPlaces from "./components/SavedPlaces";
 import AITravelPlannerPage from "./components/AI/AITravelPlannerPage";
 import { AuthGuard } from './components/Auth.Guard';
 import NotFound from './components/NotFound';
+import ForgotPassword from './components/ForgotPassword';
+import ResetPassword from './components/ResetPassword';
 
 function App() {
 
@@ -29,6 +31,8 @@ function App() {
           <Route path="/home" element={<Home />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
+          <Route path="/reset-password" element={<ResetPassword />} />
 
           <Route path="/profile" element={
             <AuthGuard>

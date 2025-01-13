@@ -61,6 +61,14 @@ CREATE TABLE IF NOT EXISTS saved_places (
     FOREIGN KEY (user_id) REFERENCES users(id)
 );
 
+CREATE TABLE IF NOT EXISTS password_reset_tokens (
+    id BIGINT PRIMARY KEY AUTO_INCREMENT,
+    token VARCHAR(255) NOT NULL UNIQUE,
+    user_id BIGINT NOT NULL,
+    expiry_date TIMESTAMP NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES users(id)
+);
+
 -- Insert default roles
 INSERT INTO roles(name) VALUES('ROLE_USER');
 INSERT INTO roles(name) VALUES('ROLE_ADMIN');
