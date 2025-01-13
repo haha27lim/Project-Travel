@@ -15,6 +15,8 @@ import { Dashboard } from './components/Dashboard';
 import { TripDetails } from './components/TripDetails';
 import SavedPlaces from "./components/SavedPlaces";
 import AITravelPlannerPage from "./components/AI/AITravelPlannerPage";
+import { AuthGuard } from './components/Auth.Guard';
+import NotFound from './components/NotFound';
 
 function App() {
 
@@ -22,19 +24,50 @@ function App() {
     <AuthProvider>
       <BrowserRouter>
         <Header />
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/home" element={<Home />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/register" element={<Register />} />
-            <Route path="/profile" element={<Profile />} />
-            <Route path="/user" element={<BoardUser />} />
-            <Route path="/admin" element={<BoardAdmin />} />
-            <Route path="/dashboard" element={<Dashboard />}/>
-            <Route path="/trips/:id" element={<TripDetails />} />
-            <Route path="/places/saved" element={<SavedPlaces />} />
-            <Route path="/ai-planner" element={<AITravelPlannerPage />} />
-          </Routes>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/home" element={<Home />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+
+          <Route path="/profile" element={
+            <AuthGuard>
+              <Profile />
+            </AuthGuard>
+          } />
+          <Route path="/user" element={
+            <AuthGuard>
+              <BoardUser />
+            </AuthGuard>
+          } />
+          <Route path="/admin" element={
+            <AuthGuard requireAdmin={true}>
+              <BoardAdmin />
+            </AuthGuard>
+          } />
+          <Route path="/dashboard" element={
+            <AuthGuard>
+              <Dashboard />
+            </AuthGuard>
+          } />
+          <Route path="/trips/:id" element={
+            <AuthGuard>
+              <TripDetails />
+            </AuthGuard>
+          } />
+          <Route path="/places/saved" element={
+            <AuthGuard>
+              <SavedPlaces />
+            </AuthGuard>
+          } />
+          <Route path="/ai-planner" element={
+            <AuthGuard>
+              <AITravelPlannerPage />
+            </AuthGuard>
+          } />
+
+          <Route path="*" element={<NotFound />} />
+        </Routes>
       </BrowserRouter>
     </AuthProvider>
   );
