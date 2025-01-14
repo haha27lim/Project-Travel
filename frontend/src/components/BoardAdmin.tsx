@@ -1,9 +1,10 @@
-import { useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
+import { Typography, Table, Button, Space, Form, Modal, Input, DatePicker, message } from "antd";
+import { EditOutlined, DeleteOutlined, PlusOutlined } from "@ant-design/icons";
 import UserService from "../services/user.service";
 import { Trip } from "../types/trip.type";
-import { Table, Button, Modal, Form, Input, DatePicker, Space, Card, Row, Col, Statistic, message,Typography } from "antd";
-import { PlusOutlined, EditOutlined, DeleteOutlined } from "@ant-design/icons";
 import moment from "moment";
+import "../styles/components/BoardAdmin.css";
 
 const { Title } = Typography;
 
@@ -124,49 +125,37 @@ export const BoardAdmin: React.FC = () => {
   ];
 
   return (
-    <div style={{ padding: "24px", maxWidth: "1200px", margin: "0 auto" }}>
-      <Title level={2} style={{ textAlign: "center", marginBottom: "32px" }}>
+    <div className="admin-dashboard">
+      <Title level={2} className="admin-title">
         Travel Management Dashboard
       </Title>
-      
-      <Row gutter={[16, 16]}>
-        <Col span={8}>
-          <Card>
-            <Statistic
-              title="Total Trips"
-              value={trips.length}
-              prefix={<i className="fas fa-plane" />}
-            />
-          </Card>
-        </Col>
-        <Col span={8}>
-          <Card>
-            <Statistic
-              title="Active Trips"
-              value={trips.filter(trip => 
-                moment(trip.endDate).isAfter(moment())
-              ).length}
-              prefix={<i className="fas fa-calendar-check" />}
-            />
-          </Card>
-        </Col>
-        <Col span={8}>
-          <Card>
-            <Statistic
-              title="Users with Trips"
-              value={new Set(trips.map(trip => trip.user.username)).size}
-              prefix={<i className="fas fa-users" />}
-            />
-          </Card>
-        </Col>
-      </Row>
 
-      <div style={{ 
-        marginTop: "24px", 
-        marginBottom: "16px",
-        display: "flex",
-        justifyContent: "center"
-      }}>
+      <div className="admin-stats">
+        <div className="stat-card">
+          <div className="stat-value">{trips.length}</div>
+          <div className="stat-label">Total Trips</div>
+        </div>
+        <div className="stat-card">
+          <div className="stat-value">
+            {trips.filter(trip => moment(trip.startDate).isAfter(moment())).length}
+          </div>
+          <div className="stat-label">Upcoming Trips</div>
+        </div>
+        <div className="stat-card">
+          <div className="stat-value">
+            {new Set(trips.map(trip => trip.user?.username)).size}
+          </div>
+          <div className="stat-label">Active Users</div>
+        </div>
+        <div className="stat-card">
+          <div className="stat-value">
+            {new Set(trips.map(trip => trip.destination)).size}
+          </div>
+          <div className="stat-label">Unique Destinations</div>
+        </div>
+      </div>
+
+      <div className="table-actions">
         <Button
           type="primary"
           icon={<PlusOutlined />}
@@ -180,13 +169,12 @@ export const BoardAdmin: React.FC = () => {
         </Button>
       </div>
 
-      <div style={{ display: "flex", justifyContent: "center" }}>
+      <div className="table-container">
         <Table
           columns={columns}
           dataSource={trips}
           rowKey="id"
           loading={loading}
-          style={{ width: "100%" }}
         />
       </div>
 
@@ -232,10 +220,19 @@ export const BoardAdmin: React.FC = () => {
           >
             <Input.TextArea />
           </Form.Item>
-          <Form.Item style={{ textAlign: "center" }}>
-            <Button type="primary" htmlType="submit">
-              {editingTrip ? "Update" : "Create"}
-            </Button>
+          <Form.Item style={{ textAlign: "right" }}>
+            <Space>
+              <Button onClick={() => {
+                setModalVisible(false);
+                form.resetFields();
+                setEditingTrip(null);
+              }}>
+                Cancel
+              </Button>
+              <Button type="primary" htmlType="submit">
+                {editingTrip ? "Update" : "Create"}
+              </Button>
+            </Space>
           </Form.Item>
         </Form>
       </Modal>

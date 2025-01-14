@@ -59,6 +59,65 @@
   display: flex;
   align-items: center;
   gap: 1rem;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  padding-bottom: 5px;
+  white-space: nowrap;
+  justify-content: space-between;
+}
+
+.nav-buttons::-webkit-scrollbar {
+  height: 6px;
+  background-color: #f5f5f5;
+}
+
+.nav-buttons::-webkit-scrollbar-thumb {
+  background-color: #cbd5e1;
+  border-radius: 3px;
+}
+
+.nav-buttons::-webkit-scrollbar-thumb:hover {
+  background-color: #94a3b8;
+}
+
+@media screen and (max-width: 768px) {
+  .header-content {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+
+  .nav-buttons {
+    width: 100%;
+    justify-content: flex-start;
+    padding: 0.5rem 0;
+  }
+
+  .nav-link {
+    padding: 0.5rem 1rem;
+    white-space: nowrap;
+  }
+
+  .login-button,
+  .signup-button,
+  .logout-button {
+    padding: 0.5rem 1rem;
+    white-space: nowrap;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .header-container {
+    padding: 0.5rem 0.75rem;
+  }
+
+  .app-title {
+    font-size: 1.25rem;
+  }
+
+  .nav-buttons {
+    gap: 0.5rem;
+  }
 }
 
 .login-button,

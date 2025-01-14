@@ -4,6 +4,7 @@
     align-items: center;
     justify-content: center;
     background-color: rgb(243, 244, 246);
+    padding: 1.5rem;
   }
   
   .auth-card {
@@ -17,18 +18,21 @@
   }
   
   .back-button {
-    position: absolute;
-    top: 1rem;
-    left: 1rem;
+    position: relative;
     display: flex;
     align-items: center;
     gap: 0.5rem;
     color: rgb(75, 85, 99);
     transition: color 0.3s;
+    padding: 0.5rem;
+    border-radius: 0.375rem;
+    margin-bottom: 1.5rem;
+    font-size: 0.875rem;
   }
   
   .back-button:hover {
     color: rgb(17, 24, 39);
+    background-color: rgb(243, 244, 246);
   }
   
   .auth-title {
@@ -36,6 +40,7 @@
     font-weight: 700;
     text-align: center;
     margin-bottom: 1.5rem;
+    color: #1f2937;
   }
   
   .auth-error {
@@ -44,10 +49,11 @@
     padding: 0.75rem;
     border-radius: 0.375rem;
     margin-bottom: 1rem;
+    font-size: 0.875rem;
   }
   
   .form-group {
-    margin-bottom: 1rem;
+    margin-bottom: 1.25rem;
   }
   
   .form-label {
@@ -55,21 +61,26 @@
     font-size: 0.875rem;
     font-weight: 500;
     color: rgb(55, 65, 81);
-    margin-bottom: 0.25rem;
+    margin-bottom: 0.375rem;
   }
   
   .form-input {
     width: 100%;
-    padding: 0.5rem 0.75rem;
+    padding: 0.625rem 0.875rem;
     border: 1px solid rgb(209, 213, 219);
     border-radius: 0.375rem;
     transition: all 0.3s;
+    font-size: 0.875rem;
   }
   
   .form-input:focus {
     outline: none;
-    ring: 2px;
-    ring-color: rgb(59, 130, 246);
+    border-color: rgb(99, 102, 241);
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+  }
+  
+  .form-input::placeholder {
+    color: rgb(156, 163, 175);
   }
   
   .submit-button {
@@ -78,10 +89,12 @@
     align-items: center;
     justify-content: center;
     gap: 0.5rem;
-    padding: 0.5rem 1rem;
+    padding: 0.75rem 1rem;
     background: linear-gradient(to right, #6366f1, #a855f7);
     color: white;
-    border-radius: 9999px;
+    border-radius: 0.5rem;
+    font-weight: 500;
+    font-size: 0.875rem;
     transition: all 0.3s;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
   }
@@ -90,4 +103,123 @@
     background: linear-gradient(to right, #4f46e5, #9333ea);
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     transform: translateY(-1px);
+  }
+  
+  .submit-button:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+    transform: none;
+  }
+  
+  .login-link {
+    display: block;
+    text-align: center;
+    margin-top: 1.5rem;
+    font-size: 0.875rem;
+    color: rgb(107, 114, 128);
+  }
+  
+  .login-link a {
+    color: #6366f1;
+    font-weight: 500;
+    text-decoration: none;
+  }
+  
+  .login-link a:hover {
+    text-decoration: underline;
+  }
+  
+  @media (max-width: 768px) {
+    .auth-container {
+      padding: 1rem;
+      align-items: flex-start;
+    }
+    
+    .auth-card {
+      padding: 1.5rem;
+      margin-top: 1rem;
+      border-radius: 0.75rem;
+    }
+    
+    .back-button {
+      margin-bottom: 1.25rem;
+    }
+    
+    .auth-title {
+      font-size: 1.25rem;
+      margin-bottom: 1.25rem;
+    }
+    
+    .form-group {
+      margin-bottom: 1rem;
+    }
+    
+    .form-input {
+      padding: 0.5rem 0.75rem;
+    }
+    
+    .submit-button {
+      padding: 0.625rem 1rem;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .auth-container {
+      padding: 0.75rem;
+    }
+    
+    .auth-card {
+      padding: 1.25rem;
+      margin-top: 0.5rem;
+      border-radius: 0.5rem;
+    }
+    
+    .back-button {
+      margin-bottom: 1rem;
+      font-size: 0.8125rem;
+    }
+    
+    .auth-title {
+      font-size: 1.125rem;
+      margin-bottom: 1rem;
+    }
+    
+    .form-label {
+      font-size: 0.8125rem;
+    }
+    
+    .form-input {
+      padding: 0.5rem 0.625rem;
+      font-size: 0.8125rem;
+    }
+    
+    .submit-button {
+      padding: 0.5rem 0.875rem;
+      font-size: 0.8125rem;
+    }
+    
+    .login-link {
+      margin-top: 1.25rem;
+      font-size: 0.8125rem;
+    }
+  }
+  
+  /* For devices with very small screens */
+  @media (max-width: 360px) {
+    .auth-container {
+      padding: 0.5rem;
+    }
+    
+    .auth-card {
+      padding: 1rem;
+    }
+    
+    .back-button {
+      margin-bottom: 0.875rem;
+      padding: 0.375rem;
+    }
+    
+    .form-group {
+      margin-bottom: 0.875rem;
+    }
   }
