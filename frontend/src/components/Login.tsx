@@ -5,7 +5,7 @@ import * as Yup from "yup";
 
 import AuthService from "../services/auth.service";
 import { useAuth } from "../contexts/AuthContext";
-import { ArrowLeft, LogIn } from "lucide-react";
+import { ArrowLeft, Eye, EyeOff, LogIn } from "lucide-react";
 import '../styles/components/Login.css';
 
 
@@ -15,6 +15,7 @@ const Login: React.FC = () => {
   const { setCurrentUser, setShowAdminBoard } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
+  const [showPassword, setShowPassword] = useState<boolean>(false);
 
   const searchParams = new URLSearchParams(location.search);
   const returnUrl = searchParams.get('returnUrl') || '/profile';
@@ -89,7 +90,20 @@ const Login: React.FC = () => {
 
               <div className="form-group">
                 <label htmlFor="password">Password</label>
-                <Field name="password" type="password" className="form-control" />
+                <div className="password-input-container">
+                  <Field
+                    name="password"
+                    type={showPassword ? "text" : "password"}
+                    className="form-control"
+                  />
+                  <button
+                    type="button"
+                    className="show-password-button"
+                    onClick={() => setShowPassword(!showPassword)}
+                  >
+                    {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+                  </button>
+                </div>
                 <ErrorMessage
                   name="password"
                   component="div"

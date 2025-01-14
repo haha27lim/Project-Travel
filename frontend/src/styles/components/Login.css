@@ -132,3 +132,23 @@
     width: 100%;
     max-width: 28rem;
   }
+
+  .password-input-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+  }
+  
+  .show-password-button {
+    position: absolute;
+    right: 10px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    color: #666;
+  }
+  
+  .show-password-button:hover {
+    color: #333;
+  }
