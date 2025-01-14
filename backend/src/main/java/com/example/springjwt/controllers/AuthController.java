@@ -5,9 +5,11 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
@@ -22,6 +24,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.springjwt.event.RegistrationCompleteEvent;
 import com.example.springjwt.models.ERole;
 import com.example.springjwt.models.Role;
 import com.example.springjwt.models.User;
@@ -38,6 +41,7 @@ import com.example.springjwt.security.services.UserDetailsImpl;
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {
+
   @Autowired
   AuthenticationManager authenticationManager;
 
@@ -52,6 +56,9 @@ public class AuthController {
 
   @Autowired
   JwtUtils jwtUtils;
+
+  @Autowired
+  private ApplicationEventPublisher publisher;
 
   @PostMapping("/signin")
   public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
@@ -77,7 +84,8 @@ public class AuthController {
   }
 
   @PostMapping("/signup")
-  public ResponseEntity<?> registerUser(@Valid @RequestBody SignupRequest signUpRequest) {
+  public ResponseEntity<?> registerUser(@Valid @RequestBody SignupRequest signUpRequest,
+      final HttpServletRequest request) {
     if (userRepository.existsByUsername(signUpRequest.getUsername())) {
       return ResponseEntity
           .badRequest()
@@ -123,8 +131,16 @@ public class AuthController {
     user.setRoles(roles);
     userRepository.save(user);
 
-    return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
+    publisher.publishEvent(new RegistrationCompleteEvent(user, applicationUrl(request))); // send registration email
+
+    return ResponseEntity.ok(new MessageResponse("User registered successfully! Please check your email for verification."));
   }
+
+  public String applicationUrl(HttpServletRequest request) {
+    return "http://" + request.getServerName() + ":"
+        + request.getServerPort() + request.getContextPath();
+  }
+
 
   @PostMapping("/signout")
   public ResponseEntity<?> logoutUser() {

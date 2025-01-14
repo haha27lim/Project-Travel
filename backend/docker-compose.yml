@@ -27,6 +27,7 @@ services:
       - JWTSECRET=${JWTSECRET}
       - EMAIL_APP_PASSWORD=${EMAIL_APP_PASSWORD}
       - GEMINI_API_KEY=${GEMINI_API_KEY}
+      - FRONTEND_URL=${FRONTEND_URL}
     ports:
       - "8080:8080"
 
