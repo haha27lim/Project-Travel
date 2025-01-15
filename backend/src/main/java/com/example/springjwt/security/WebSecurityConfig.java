@@ -80,9 +80,14 @@ public class WebSecurityConfig {
         .cors(cors -> cors.configurationSource(corsConfigurationSource()))  
         .exceptionHandling(exception -> exception.authenticationEntryPoint(unauthorizedHandler))
         .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-        .authorizeHttpRequests(auth -> auth.requestMatchers("/api/auth/**").permitAll()
+        .authorizeHttpRequests(auth -> auth
+            .requestMatchers("/api/auth/**", "/oauth2/**", "/login/oauth2/code/google").permitAll()
             .requestMatchers("/api/test/**").permitAll()
-            .anyRequest().authenticated());
+            .anyRequest().authenticated())
+        .oauth2Login(oauth2 -> oauth2
+            .loginPage("/login")
+            .defaultSuccessUrl("/api/auth/oauth2/success")
+            .failureUrl("/api/auth/oauth2/failure"));
 
     http.authenticationProvider(authenticationProvider());
     http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);

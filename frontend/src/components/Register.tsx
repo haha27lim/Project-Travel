@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Formik, Field, Form, ErrorMessage } from "formik";
 import * as Yup from "yup";
 
@@ -10,8 +10,26 @@ import { ArrowLeft, UserPlus } from "lucide-react";
 const Register: React.FC = () => {
   const [successful, setSuccessful] = useState<boolean>(false);
   const [message, setMessage] = useState<string>("");
+  const [isGoogleRedirect, setIsGoogleRedirect] = useState<boolean>(false);
 
-  // Validation Schema
+  const handleGoogleSignup = () => {
+    setIsGoogleRedirect(true);
+    window.location.href = `${import.meta.env.VITE_APP_API_URL}/oauth2/authorization/google`;
+  };
+
+  useEffect(() => {
+    const handlePopState = () => {
+      setIsGoogleRedirect(false);
+    };
+
+    window.addEventListener('popstate', handlePopState);
+
+    return () => {
+      window.removeEventListener('popstate', handlePopState);
+    };
+  }, []);
+
+  
   const validationSchema = Yup.object().shape({
     username: Yup.string()
       .test(
@@ -32,7 +50,7 @@ const Register: React.FC = () => {
       .required("This field is required!"),
   });
 
-  // Form Submit Handler
+  
   const handleRegister = (formValue: { username: string; email: string; password: string }) => {
     const { username, email, password } = formValue;
 
@@ -80,8 +98,25 @@ const Register: React.FC = () => {
             onSubmit={handleRegister}
           >
             <Form>
-              {!successful && (
+              {!successful && !isGoogleRedirect &&(
                 <div>
+                  <div className="form-group">
+                    <button
+                      type="button"
+                      onClick={handleGoogleSignup}
+                      className="google-login-button"
+                    >
+                      <img
+                        src="/google-icon.svg"
+                        alt="Google"
+                        className="google-icon"
+                      />
+                      Sign up with Google
+                    </button>
+                  </div>
+
+                  <div className="or-login-with">Or sign up with</div>
+
                   <div className="form-group">
                     <label htmlFor="username"> Username </label>
                     <Field name="username" type="text" className="form-control" />
@@ -120,7 +155,8 @@ const Register: React.FC = () => {
                     <button type="submit" className="submit-button">
                       <UserPlus className="button-icon" />
                       Register
-                    </ button>
+                    </button>
+
                     <div className="auth-links">
                       Already have an account?{' '}
                       <Link to="/login" className="auth-link">Sign in</Link>

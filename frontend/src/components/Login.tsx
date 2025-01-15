@@ -63,6 +63,10 @@ const Login: React.FC = () => {
     password: "",
   };
 
+  const handleGoogleLogin = () => {
+    window.location.href = `${import.meta.env.VITE_APP_API_URL}/oauth2/authorization/google`;
+  };
+
   return (
     <div className="login-container">
       <div className="auth-card">
@@ -78,6 +82,23 @@ const Login: React.FC = () => {
             onSubmit={handleLogin}
           >
             <Form>
+              <div className="form-group">
+                <button
+                  type="button"
+                  onClick={handleGoogleLogin}
+                  className="google-login-button"
+                >
+                  <img
+                    src="/google-icon.svg"
+                    alt="Google"
+                    className="google-icon"
+                  />
+                  Sign in with Google
+                </button>
+              </div>
+
+              <div className="or-login-with">Or login with</div>
+
               <div className="form-group">
                 <label htmlFor="username">Username</label>
                 <Field name="username" type="text" className="form-control" />

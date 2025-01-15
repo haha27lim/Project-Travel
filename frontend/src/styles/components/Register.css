@@ -4,7 +4,6 @@
     align-items: center;
     justify-content: center;
     background-color: rgb(243, 244, 246);
-    padding: 1.5rem;
   }
   
   .auth-card {
@@ -18,21 +17,18 @@
   }
   
   .back-button {
-    position: relative;
+    position: absolute;
+    top: 1rem;
+    left: 1rem;
     display: flex;
     align-items: center;
     gap: 0.5rem;
     color: rgb(75, 85, 99);
     transition: color 0.3s;
-    padding: 0.5rem;
-    border-radius: 0.375rem;
-    margin-bottom: 1.5rem;
-    font-size: 0.875rem;
   }
   
   .back-button:hover {
     color: rgb(17, 24, 39);
-    background-color: rgb(243, 244, 246);
   }
   
   .auth-title {
@@ -40,47 +36,41 @@
     font-weight: 700;
     text-align: center;
     margin-bottom: 1.5rem;
-    color: #1f2937;
-  }
-  
-  .auth-error {
-    background-color: rgb(254, 242, 242);
-    color: rgb(239, 68, 68);
-    padding: 0.75rem;
-    border-radius: 0.375rem;
-    margin-bottom: 1rem;
-    font-size: 0.875rem;
   }
   
   .form-group {
-    margin-bottom: 1.25rem;
+    margin-bottom: 1rem;
   }
   
-  .form-label {
-    display: block;
-    font-size: 0.875rem;
-    font-weight: 500;
-    color: rgb(55, 65, 81);
-    margin-bottom: 0.375rem;
-  }
-  
-  .form-input {
+  .form-control {
     width: 100%;
-    padding: 0.625rem 0.875rem;
-    border: 1px solid rgb(209, 213, 219);
+    padding: 0.5rem;
+    border: 1px solid #e5e7eb;
     border-radius: 0.375rem;
-    transition: all 0.3s;
+    margin-top: 0.25rem;
+  }
+  
+  .form-control:focus {
+    outline: none;
+    border-color: #6366f1;
+    box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.2);
+  }
+  
+  .alert {
+    padding: 0.5rem;
+    border-radius: 0.375rem;
+    margin-top: 0.25rem;
     font-size: 0.875rem;
   }
   
-  .form-input:focus {
-    outline: none;
-    border-color: rgb(99, 102, 241);
-    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+  .alert-danger {
+    background-color: #fee2e2;
+    color: #dc2626;
   }
   
-  .form-input::placeholder {
-    color: rgb(156, 163, 175);
+  .alert-success {
+    background-color: #dcfce7;
+    color: #16a34a;
   }
   
   .submit-button {
@@ -89,137 +79,92 @@
     align-items: center;
     justify-content: center;
     gap: 0.5rem;
-    padding: 0.75rem 1rem;
+    padding: 0.5rem 1rem;
     background: linear-gradient(to right, #6366f1, #a855f7);
     color: white;
-    border-radius: 0.5rem;
+    border-radius: 0.375rem;
     font-weight: 500;
-    font-size: 0.875rem;
     transition: all 0.3s;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    border: none;
+    cursor: pointer;
   }
   
   .submit-button:hover {
-    background: linear-gradient(to right, #4f46e5, #9333ea);
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    opacity: 0.9;
     transform: translateY(-1px);
   }
   
-  .submit-button:disabled {
-    opacity: 0.7;
-    cursor: not-allowed;
-    transform: none;
+  .button-icon {
+    width: 1.25rem;
+    height: 1.25rem;
   }
   
-  .login-link {
-    display: block;
+  .auth-links {
     text-align: center;
-    margin-top: 1.5rem;
+    margin-top: 1rem;
     font-size: 0.875rem;
-    color: rgb(107, 114, 128);
+    color: rgb(75, 85, 99);
   }
   
-  .login-link a {
+  .auth-link {
     color: #6366f1;
     font-weight: 500;
     text-decoration: none;
   }
   
-  .login-link a:hover {
+  .auth-link:hover {
     text-decoration: underline;
   }
   
-  @media (max-width: 768px) {
-    .auth-container {
-      padding: 1rem;
-      align-items: flex-start;
-    }
-    
-    .auth-card {
-      padding: 1.5rem;
-      margin-top: 1rem;
-      border-radius: 0.75rem;
-    }
-    
-    .back-button {
-      margin-bottom: 1.25rem;
-    }
-    
-    .auth-title {
-      font-size: 1.25rem;
-      margin-bottom: 1.25rem;
-    }
-    
-    .form-group {
-      margin-bottom: 1rem;
-    }
-    
-    .form-input {
-      padding: 0.5rem 0.75rem;
-    }
-    
-    .submit-button {
-      padding: 0.625rem 1rem;
-    }
+  .google-login-button {
+    width: 100%;
+    padding: 10px;
+    margin-top: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background-color: white;
+    color: #757575;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
   }
   
-  @media (max-width: 480px) {
-    .auth-container {
-      padding: 0.75rem;
-    }
-    
-    .auth-card {
-      padding: 1.25rem;
-      margin-top: 0.5rem;
-      border-radius: 0.5rem;
-    }
-    
-    .back-button {
-      margin-bottom: 1rem;
-      font-size: 0.8125rem;
-    }
-    
-    .auth-title {
-      font-size: 1.125rem;
-      margin-bottom: 1rem;
-    }
-    
-    .form-label {
-      font-size: 0.8125rem;
-    }
-    
-    .form-input {
-      padding: 0.5rem 0.625rem;
-      font-size: 0.8125rem;
-    }
-    
-    .submit-button {
-      padding: 0.5rem 0.875rem;
-      font-size: 0.8125rem;
-    }
-    
-    .login-link {
-      margin-top: 1.25rem;
-      font-size: 0.8125rem;
-    }
+  .google-login-button:hover {
+    background-color: #f5f5f5;
   }
   
-  /* For devices with very small screens */
-  @media (max-width: 360px) {
-    .auth-container {
-      padding: 0.5rem;
-    }
-    
-    .auth-card {
-      padding: 1rem;
-    }
-    
-    .back-button {
-      margin-bottom: 0.875rem;
-      padding: 0.375rem;
-    }
-    
-    .form-group {
-      margin-bottom: 0.875rem;
-    }
+  .google-icon {
+    width: 18px;
+    height: 18px;
+    margin-right: 10px;
+  }
+  
+  .or-login-with {
+    position: relative;
+    text-align: center;
+    margin: 15px 0;
+    color: #6b7280;
+    font-size: 0.875rem;
+  }
+  
+  .or-login-with::before,
+  .or-login-with::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    width: 45%;
+    height: 1px;
+    background: linear-gradient(to right, #e5e7eb 0%, transparent 100%);
+  }
+  
+  .or-login-with::before {
+    left: 0;
+  }
+  
+  .or-login-with::after {
+    right: 0;
+    background: linear-gradient(to left, #e5e7eb 0%, transparent 100%);
   }
