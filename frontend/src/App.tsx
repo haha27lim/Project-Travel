@@ -20,6 +20,8 @@ import NotFound from './components/NotFound';
 import ForgotPassword from './components/ForgotPassword';
 import ResetPassword from './components/ResetPassword';
 import Chatbot from './components/AI/Chatbot';
+import { UserManagement } from './components/admin/UserManagement';
+import { TripManagement } from './components/admin/TripManagement';
 
 function App() {
   return (
@@ -47,6 +49,16 @@ function App() {
           <Route path="/admin" element={
             <AuthGuard requireAdmin={true}>
               <BoardAdmin />
+            </AuthGuard>
+          } />
+          <Route path="/admin/users" element={
+            <AuthGuard requireAdmin={true}>
+              <UserManagement />
+            </AuthGuard>
+          } />
+          <Route path="/admin/trips" element={
+            <AuthGuard requireAdmin={true}>
+              <TripManagement />
             </AuthGuard>
           } />
           <Route path="/dashboard" element={

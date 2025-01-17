@@ -21,7 +21,29 @@ class UserService {
     return axios.get(API_URL + "test/admin", { headers: authHeader() });
   }
 
-  // Admin Trip Management
+  getAllUsers() {
+    return axios.get(API_URL + "users", { headers: authHeader() });
+  }
+
+  updateUser(id: number, userData: any) {
+    const headers = authHeader();
+    console.log('Update user request:', {
+      url: `${API_URL}users/${id}`,
+      headers,
+      data: userData
+    });
+    return axios.put(`${API_URL}users/${id}`, userData, { 
+      headers: {
+        ...headers,
+        'Content-Type': 'application/json'
+      }
+    });
+  }
+
+  deleteUser(id: number) {
+    return axios.delete(`${API_URL}users/${id}`, { headers: authHeader() });
+  }
+
   getAdminTrips() {
     return axios.get<Trip[]>(API_URL + "trips/admin", { headers: authHeader() });
   }
