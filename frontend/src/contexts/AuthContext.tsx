@@ -7,6 +7,8 @@ interface AuthContextType {
   setCurrentUser: (user: IUser | undefined) => void;
   showAdminBoard: boolean;
   setShowAdminBoard: (show: boolean) => void;
+  isAuthenticated: boolean;
+  logout: () => void;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -23,12 +25,20 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
   }, []);
 
+  const logout = () => {
+    AuthService.logout();
+    setCurrentUser(undefined);
+    setShowAdminBoard(false);
+  };
+
   return (
     <AuthContext.Provider value={{ 
       currentUser, 
       setCurrentUser, 
       showAdminBoard, 
-      setShowAdminBoard
+      setShowAdminBoard,
+      isAuthenticated: !!currentUser,
+      logout
     }}>
       {children}
     </AuthContext.Provider>

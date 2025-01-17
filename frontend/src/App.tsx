@@ -19,9 +19,9 @@ import { AuthGuard } from './components/Auth.Guard';
 import NotFound from './components/NotFound';
 import ForgotPassword from './components/ForgotPassword';
 import ResetPassword from './components/ResetPassword';
+import Chatbot from './components/AI/Chatbot';
 
 function App() {
-
   return (
     <AuthProvider>
       <BrowserRouter>
@@ -72,6 +72,9 @@ function App() {
 
           <Route path="*" element={<NotFound />} />
         </Routes>
+
+        <Chatbot />
+        
       </BrowserRouter>
     </AuthProvider>
   );
