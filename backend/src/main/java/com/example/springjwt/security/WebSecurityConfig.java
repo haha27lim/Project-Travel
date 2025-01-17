@@ -81,7 +81,7 @@ public class WebSecurityConfig {
         .exceptionHandling(exception -> exception.authenticationEntryPoint(unauthorizedHandler))
         .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
         .authorizeHttpRequests(auth -> auth
-            .requestMatchers("/api/auth/**", "/oauth2/**", "/login/oauth2/code/google").permitAll()
+            .requestMatchers("/api/auth/**", "/oauth2/**", "/login/oauth2/code/google", "/api/health").permitAll()
             .requestMatchers("/api/test/**").permitAll()
             .anyRequest().authenticated())
         .oauth2Login(oauth2 -> oauth2

@@ -1,4 +1,4 @@
-package com.example.springjwt.services;
+package com.example.springjwt.service;
 
 import org.springframework.stereotype.Service;
 
