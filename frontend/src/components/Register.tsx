@@ -10,7 +10,7 @@ import { ArrowLeft, UserPlus } from "lucide-react";
 const Register: React.FC = () => {
   const [successful, setSuccessful] = useState<boolean>(false);
   const [message, setMessage] = useState<string>("");
-  const [isGoogleRedirect, setIsGoogleRedirect] = useState<boolean>(false);
+  const [ , setIsGoogleRedirect] = useState<boolean>(false);
 
   const handleGoogleSignup = () => {
     setIsGoogleRedirect(true);
@@ -98,7 +98,7 @@ const Register: React.FC = () => {
             onSubmit={handleRegister}
           >
             <Form>
-              {!successful && !isGoogleRedirect &&(
+              {!successful && (
                 <div>
                   <div className="form-group">
                     <button
