@@ -34,13 +34,14 @@ export const TripForm: React.FC<TripFormProps> = ({ initialTrip, onSubmit, onCan
       notes
     });
 
-    if (!initialTrip)
+    if (!initialTrip) {
       setDestination('');
-    setStartDate('');
-    setEndDate('');
-    setNotes('');
-    setActivities([]);
-    setPlaces([])
+      setStartDate('');
+      setEndDate('');
+      setNotes('');
+      setActivities([]);
+      setPlaces([]);
+    }
   };
 
   const handleLocationSelect = (loc: { name: string }) => {
