@@ -13,6 +13,8 @@ public class PasswordResetToken {
     @Column(nullable = false, unique = true)
     private String token;
 
+    private boolean used;
+
     @OneToOne(targetEntity = User.class, fetch = FetchType.EAGER)
     @JoinColumn(nullable = false, name = "user_id")
     private User user;
@@ -60,4 +62,14 @@ public class PasswordResetToken {
     public void setExpiryDate(Instant expiryDate) {
         this.expiryDate = expiryDate;
     }
-} 
+
+    public boolean isUsed() {
+        return used;
+    }
+
+    public void setUsed(boolean used) {
+        this.used = used;
+    }
+
+    
+}

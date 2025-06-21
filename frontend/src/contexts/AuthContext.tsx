@@ -1,44 +1,71 @@
-import { createContext, useContext, useState, useEffect } from 'react';
+import { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import AuthService from "../services/auth.service";
 import IUser from "../types/user.type";
+import toast from "react-hot-toast";
+import api from "../services/userapi";
 
 interface AuthContextType {
   currentUser: IUser | undefined;
-  setCurrentUser: (user: IUser | undefined) => void;
+  setCurrentUser: (user: any) => void;
   showAdminBoard: boolean;
   setShowAdminBoard: (show: boolean) => void;
   isAuthenticated: boolean;
   logout: () => void;
+  fetchUser: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
-  const [currentUser, setCurrentUser] = useState<IUser | undefined>(undefined);
-  const [showAdminBoard, setShowAdminBoard] = useState<boolean>(false);
 
-  useEffect(() => {
-    const user = AuthService.getCurrentUser();
-    if (user) {
-      setCurrentUser(user);
-      setShowAdminBoard(user.roles.includes("ROLE_ADMIN"));
+  const [currentUser, setCurrentUser] = useState<IUser | undefined>(undefined);
+  const [showAdminBoard, setShowAdminBoard] = useState(false);
+  const [loading, setLoading] = useState(true);
+
+  const fetchUser = useCallback(async () => {
+    try {
+      const { data } = await api.get(`/auth/user`);
+      setCurrentUser(data);
+      if (data.roles.includes("ROLE_ADMIN")) {
+        setShowAdminBoard(true);
+      } else {
+        setShowAdminBoard(false);
+      }
+    } catch (error) {
+      console.error("Not authenticated or error fetching user", error);
+      setCurrentUser(undefined);
+      setShowAdminBoard(false);
     }
   }, []);
 
-  const logout = () => {
-    AuthService.logout();
+  useEffect(() => {
+    
+    const checkLoginStatus = async () => {
+      await fetchUser();
+      setLoading(false);
+    };
+    checkLoginStatus();
+  }, [fetchUser]);
+
+  const logout = async () => {
+    await AuthService.logout();
     setCurrentUser(undefined);
     setShowAdminBoard(false);
   };
 
+  if (loading) {
+    return <div>Loading application...</div>;
+  }
+
   return (
-    <AuthContext.Provider value={{ 
-      currentUser, 
-      setCurrentUser, 
-      showAdminBoard, 
+    <AuthContext.Provider value={{
+      currentUser,
+      setCurrentUser,
+      showAdminBoard,
       setShowAdminBoard,
       isAuthenticated: !!currentUser,
-      logout
+      logout,
+      fetchUser
     }}>
       {children}
     </AuthContext.Provider>

@@ -22,6 +22,7 @@ import ResetPassword from './components/ResetPassword';
 import Chatbot from './components/AI/Chatbot';
 import { UserManagement } from './components/admin/UserManagement';
 import { TripManagement } from './components/admin/TripManagement';
+import OAuth2RedirectHandler from './components/Auth/OAuth2RedirectHandler';
 
 function App() {
   return (
@@ -82,11 +83,13 @@ function App() {
             </AuthGuard>
           } />
 
+          <Route path="/oauth2/redirect" element={<OAuth2RedirectHandler />} />
+
           <Route path="*" element={<NotFound />} />
         </Routes>
 
         <Chatbot />
-        
+
       </BrowserRouter>
     </AuthProvider>
   );

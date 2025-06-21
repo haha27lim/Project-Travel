@@ -3,16 +3,18 @@ package com.example.springjwt.payload.response;
 import java.util.List;
 
 public class UserInfoResponse {
-  
+
 	private Long id;
 	private String username;
 	private String email;
+	private String imageUrl;
 	private List<String> roles;
 
-	public UserInfoResponse(Long id, String username, String email, List<String> roles) {
+	public UserInfoResponse(Long id, String username, String email, String imageUrl, List<String> roles) {
 		this.id = id;
 		this.username = username;
 		this.email = email;
+		this.imageUrl = null;
 		this.roles = roles;
 	}
 
@@ -43,4 +45,17 @@ public class UserInfoResponse {
 	public List<String> getRoles() {
 		return roles;
 	}
+
+	public String getImageUrl() {
+		return imageUrl;
+	}
+
+	public void setImageUrl(String imageUrl) {
+		this.imageUrl = imageUrl;
+	}
+
+	public void setRoles(List<String> roles) {
+		this.roles = roles;
+	}
+	
 }

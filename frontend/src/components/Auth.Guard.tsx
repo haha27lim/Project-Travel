@@ -1,4 +1,4 @@
-import { Navigate, useLocation } from 'react-router-dom';
+import { Navigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 
 interface AuthGuardProps {
@@ -8,11 +8,10 @@ interface AuthGuardProps {
 
 export const AuthGuard: React.FC<AuthGuardProps> = ({ children, requireAdmin = false }) => {
   const { currentUser, showAdminBoard } = useAuth();
-  const location = useLocation();
 
   if (!currentUser) {
 
-    return <Navigate to={`/login?returnUrl=${encodeURIComponent(location.pathname)}`} replace />;
+    return <Navigate to={`/login`} replace />;
   }
 
   if (requireAdmin && !showAdminBoard) {

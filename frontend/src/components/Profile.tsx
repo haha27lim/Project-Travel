@@ -1,31 +1,26 @@
 import { useEffect, useState } from "react";
 import { Navigate } from "react-router-dom";
-import AuthService from "../services/auth.service";
-import IUser from "../types/user.type";
 import { Camera, Mail, Shield, User as UserIcon } from "lucide-react";
 import '../styles/components/Profile.css';
+import { useAuth } from "../contexts/AuthContext";
+
 
 const Profile: React.FC = () => {
+
   const [redirect, setRedirect] = useState<string | null>(null);
   const [userReady, setUserReady] = useState<boolean>(false);
-  const [currentUser, setCurrentUser] = useState<IUser & { accessToken: string }>({
-    accessToken: "",
-    id: "",
-    username: "",
-    email: "",
-    roles: [],
-  });
+  const { currentUser } = useAuth();
+
 
   useEffect(() => {
-    const currentUser = AuthService.getCurrentUser();
 
     if (!currentUser) {
       setRedirect("/home");
     } else {
-      setCurrentUser(currentUser);
       setUserReady(true);
     }
-  }, []);
+  }, [currentUser]);
+
 
   if (redirect) {
     return <Navigate to={redirect} />;
@@ -33,7 +28,7 @@ const Profile: React.FC = () => {
 
   return (
     <div className="profile-container">
-      {userReady ? (
+      {currentUser ? (
         <div className="profile-content">
           <div className="profile-header">
             <div className="avatar-container">
@@ -76,7 +71,7 @@ const Profile: React.FC = () => {
               <div className="detail-info">
                 <h3>Roles</h3>
                 <div className="roles-container">
-                  {currentUser.roles?.map((role, index) => (
+                  {currentUser.roles?.map((role: any, index: any) => (
                     <span key={index} className="role-badge">
                       {role.replace('ROLE_', '')}
                     </span>
@@ -84,8 +79,10 @@ const Profile: React.FC = () => {
                 </div>
               </div>
             </div>
+
+
           </div>
-          
+
         </div>
       ) : null}
     </div>

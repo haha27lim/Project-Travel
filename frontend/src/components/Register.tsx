@@ -4,13 +4,17 @@ import * as Yup from "yup";
 
 import AuthService from "../services/auth.service";
 import '../styles/components/Register.css';
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { ArrowLeft, UserPlus } from "lucide-react";
+import { useAuth } from "../contexts/AuthContext";
 
 const Register: React.FC = () => {
   const [successful, setSuccessful] = useState<boolean>(false);
   const [message, setMessage] = useState<string>("");
-  const [ , setIsGoogleRedirect] = useState<boolean>(false);
+  const [, setIsGoogleRedirect] = useState<boolean>(false);
+
+  const { isAuthenticated } = useAuth();
+  const navigate = useNavigate();
 
   const handleGoogleSignup = () => {
     setIsGoogleRedirect(true);
@@ -29,7 +33,7 @@ const Register: React.FC = () => {
     };
   }, []);
 
-  
+
   const validationSchema = Yup.object().shape({
     username: Yup.string()
       .test(
@@ -50,7 +54,7 @@ const Register: React.FC = () => {
       .required("This field is required!"),
   });
 
-  
+
   const handleRegister = (formValue: { username: string; email: string; password: string }) => {
     const { username, email, password } = formValue;
 
@@ -82,6 +86,11 @@ const Register: React.FC = () => {
     password: "",
   };
 
+  useEffect(() => {
+    if (isAuthenticated) navigate("/");
+  }, [navigate, isAuthenticated]);
+
+  
   return (
     <div className="auth-container">
       <div className="auth-card">
