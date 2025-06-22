@@ -102,7 +102,6 @@ public class WebSecurityConfig {
             .requestMatchers("/api/test/**").permitAll()
             .requestMatchers("/oauth2/**").permitAll()
             .requestMatchers("/h2-console/**").permitAll()
-            .requestMatchers("/**").permitAll()
             .anyRequest().authenticated())
         .headers(headers -> headers
             .frameOptions(frame -> frame.sameOrigin())
