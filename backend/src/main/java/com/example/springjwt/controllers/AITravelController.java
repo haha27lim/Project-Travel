@@ -12,7 +12,7 @@ import com.example.springjwt.payload.request.ShareItineraryRequest;
 import jakarta.mail.MessagingException;
 import jakarta.validation.Valid;
 
-@CrossOrigin(origins = "*", maxAge = 3600)
+
 @RestController
 @RequestMapping("/api/ai")
 public class AITravelController {

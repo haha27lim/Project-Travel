@@ -22,22 +22,18 @@ import jakarta.validation.constraints.Size;
 public class User {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @Column(name = "user_id")
   private Long id;
 
   @NotBlank
   @Size(max = 20)
-  @Column(name = "username")
   private String username;
 
   @NotBlank
   @Size(max = 50)
   @Email
-  @Column(name = "email")
   private String email;
 
   @Size(max = 120)
-  @Column(name = "password")
   @JsonIgnore
   private String password;
 
@@ -92,6 +88,9 @@ public class User {
 
   public void setEmail(String email) {
     this.email = email;
+    if (this.username == null || this.username.isEmpty()) {
+      this.username = email.split("@")[0];
+    }
   }
 
   public String getPassword() {

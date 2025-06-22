@@ -8,7 +8,7 @@ import { useAuth } from "../contexts/AuthContext";
 const Profile: React.FC = () => {
 
   const [redirect, setRedirect] = useState<string | null>(null);
-  const [userReady, setUserReady] = useState<boolean>(false);
+  const [, setUserReady] = useState<boolean>(false);
   const { currentUser } = useAuth();
 
 

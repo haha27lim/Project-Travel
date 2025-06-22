@@ -78,7 +78,7 @@ public class WebSecurityConfig {
         "https://project-travel-4zdr.vercel.app/",
         "https://project-travel-ww3y.onrender.com"));
     configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
-    configuration.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type", "X-Requested-With", "x-xsrf-token"));
+    configuration.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type", "X-Requested-With", "X-XSRF-TOKEN"));
     configuration.setAllowCredentials(true);
     configuration.setMaxAge(3600L);
 
@@ -90,12 +90,13 @@ public class WebSecurityConfig {
   @Bean
   public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
     http.csrf(csrf -> csrf.csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
-        .ignoringRequestMatchers("/api/auth/**"))
+        .ignoringRequestMatchers("/api/auth/**", "/h2-console/**"))
         .cors(cors -> cors.configurationSource(corsConfigurationSource()))
         .exceptionHandling(exception -> exception.authenticationEntryPoint(unauthorizedHandler))
         .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
         .authorizeHttpRequests(auth -> auth
-            .requestMatchers("/").permitAll()
+            .requestMatchers("/", "/index.html", "/assets/**", "/*.ico", "/*.png", "/*.svg", "/*.webmanifest",
+                "/*.js", "/vite.svg").permitAll()
             .requestMatchers("/api/auth/**", "/oauth2/**", "/login/oauth2/code/google", "/api/health").permitAll()
             .requestMatchers("/api/csrf-token").permitAll()
             .requestMatchers("/api/test/**").permitAll()
@@ -103,15 +104,18 @@ public class WebSecurityConfig {
             .requestMatchers("/h2-console/**").permitAll()
             .requestMatchers("/**").permitAll()
             .anyRequest().authenticated())
+        .headers(headers -> headers
+            .frameOptions(frame -> frame.sameOrigin())
+        )
         .oauth2Login(oauth2 -> {
           oauth2.successHandler(oAuth2LoginSuccessHandler);
+
         });
 
     http.authenticationProvider(authenticationProvider());
     http.exceptionHandling(exception -> exception.authenticationEntryPoint(unauthorizedHandler));
     http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
-    http.formLogin(withDefaults());
-    http.httpBasic(withDefaults());
+
 
     return http.build();
   }

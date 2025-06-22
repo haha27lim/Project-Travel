@@ -29,7 +29,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-
 @Component
 @RequiredArgsConstructor
 public class OAuth2LoginSuccessHandler extends SavedRequestAwareAuthenticationSuccessHandler {
@@ -53,70 +52,64 @@ public class OAuth2LoginSuccessHandler extends SavedRequestAwareAuthenticationSu
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
             Authentication authentication) throws ServletException, IOException {
         OAuth2AuthenticationToken oAuth2AuthenticationToken = (OAuth2AuthenticationToken) authentication;
-        if ("google".equals(oAuth2AuthenticationToken.getAuthorizedClientRegistrationId())) {
-            DefaultOAuth2User principal = (DefaultOAuth2User) authentication.getPrincipal();
-            Map<String, Object> attributes = principal.getAttributes();
-            String email = attributes.getOrDefault("email", "").toString();
-            String name = attributes.getOrDefault("name", "").toString();
-            if ("google".equals(oAuth2AuthenticationToken.getAuthorizedClientRegistrationId())) {
-                username = email.split("@")[0];
-                idAttributeKey = "sub";
-            } else {
-                username = "";
-                idAttributeKey = "id";
-            }
-            System.out.println("HELLO OAUTH: " + email + " : " + name + " : " + username);
-
-            userService.findByEmail(email)
-                    .ifPresentOrElse(user -> {
-                        String roleName = user.getRoles().stream()
-                                .map(role -> role.getName().name())
-                                .findFirst()
-                                .orElse(ERole.ROLE_USER.name());
-
-                        DefaultOAuth2User oauthUser = new DefaultOAuth2User(
-                                List.of(new SimpleGrantedAuthority(roleName)),
-                                attributes,
-                                idAttributeKey);
-
-                        Authentication securityAuth = new OAuth2AuthenticationToken(
-                                oauthUser,
-                                List.of(new SimpleGrantedAuthority(roleName)),
-                                oAuth2AuthenticationToken.getAuthorizedClientRegistrationId());
-                        SecurityContextHolder.getContext().setAuthentication(securityAuth);
-                    }, () -> {
-                        User newUser = new User();
-                        Optional<Role> userRole = roleRepository.findByName(ERole.ROLE_USER); // Fetch existing role
-                        if (userRole.isPresent()) {
-                            newUser.setRoles(java.util.Collections.singleton(userRole.get())); // Set existing role
-                        } else {
-                            
-                            throw new RuntimeException("Default role not found");
-                        }
-                        newUser.setEmail(email);
-                        newUser.setUsername(username);
-                        newUser.setSignUpMethod(oAuth2AuthenticationToken.getAuthorizedClientRegistrationId());
-                        userService.registerUser(newUser);
-                        DefaultOAuth2User oauthUser = new DefaultOAuth2User(
-                                List.of(new SimpleGrantedAuthority(ERole.ROLE_USER.name())),
-                                attributes,
-                                idAttributeKey);
-                        Authentication securityAuth = new OAuth2AuthenticationToken(
-                                oauthUser,
-                                List.of(new SimpleGrantedAuthority(ERole.ROLE_USER.name())),
-                                oAuth2AuthenticationToken.getAuthorizedClientRegistrationId());
-                        SecurityContextHolder.getContext().setAuthentication(securityAuth);
-                    });
+        if (!"google".equals(oAuth2AuthenticationToken.getAuthorizedClientRegistrationId())) {
+            super.onAuthenticationSuccess(request, response, authentication);
+            return;
         }
 
-        // === COOKIE LOGIC (REPLACES JWT TOKEN LOGIC) ===
-        DefaultOAuth2User oauth2User = (DefaultOAuth2User) authentication.getPrincipal();
-        Map<String, Object> attributes = oauth2User.getAttributes();
-        String email = (String) attributes.get("email");
+        DefaultOAuth2User principal = (DefaultOAuth2User) authentication.getPrincipal();
+        Map<String, Object> attributes = principal.getAttributes();
+        String email = attributes.getOrDefault("email", "").toString();
+        String name = attributes.getOrDefault("name", "").toString();
+        String username = email.split("@")[0];
+        String idAttributeKey = "sub";
 
+        System.out.println("HELLO OAUTH: " + email + " : " + name + " : " + username);
+
+        userService.findByEmail(email)
+                .ifPresentOrElse(user -> {
+                    String roleName = user.getRoles().stream()
+                            .map(role -> role.getName().name())
+                            .findFirst()
+                            .orElse(ERole.ROLE_USER.name());
+
+                    DefaultOAuth2User oauthUser = new DefaultOAuth2User(
+                            List.of(new SimpleGrantedAuthority(roleName)),
+                            attributes,
+                            idAttributeKey);
+
+                    Authentication securityAuth = new OAuth2AuthenticationToken(
+                            oauthUser,
+                            List.of(new SimpleGrantedAuthority(roleName)),
+                            oAuth2AuthenticationToken.getAuthorizedClientRegistrationId());
+                    SecurityContextHolder.getContext().setAuthentication(securityAuth);
+                }, () -> {
+                    User newUser = new User();
+                    Optional<Role> userRole = roleRepository.findByName(ERole.ROLE_USER); // Fetch existing role
+                    if (userRole.isPresent()) {
+                        newUser.setRoles(java.util.Collections.singleton(userRole.get())); // Set existing role
+                    } else {
+
+                        throw new RuntimeException("Default role not found");
+                    }
+                    newUser.setEmail(email);
+                    newUser.setUsername(username);
+                    newUser.setSignUpMethod(oAuth2AuthenticationToken.getAuthorizedClientRegistrationId());
+                    userService.registerUser(newUser);
+                    DefaultOAuth2User oauthUser = new DefaultOAuth2User(
+                            List.of(new SimpleGrantedAuthority(ERole.ROLE_USER.name())),
+                            attributes,
+                            idAttributeKey);
+                    Authentication securityAuth = new OAuth2AuthenticationToken(
+                            oauthUser,
+                            List.of(new SimpleGrantedAuthority(ERole.ROLE_USER.name())),
+                            oAuth2AuthenticationToken.getAuthorizedClientRegistrationId());
+                    SecurityContextHolder.getContext().setAuthentication(securityAuth);
+                });
+
+        // === COOKIE LOGIC (REPLACES JWT TOKEN LOGIC) ===
         System.out.println("OAuth2LoginSuccessHandler: " + username + " : " + email);
 
-        
         UserDetailsImpl userDetails = new UserDetailsImpl(
                 null,
                 username,
@@ -124,14 +117,13 @@ public class OAuth2LoginSuccessHandler extends SavedRequestAwareAuthenticationSu
                 null,
                 authentication.getAuthorities());
 
-        
         ResponseCookie jwtCookie = jwtUtils.generateJwtCookie(userDetails);
-        
+
         response.addHeader("Set-Cookie", jwtCookie.toString());
-        
+
         String targetUrl = UriComponentsBuilder.fromUriString(frontendUrl + "/oauth2/redirect")
-        .build().toUriString();
-        
+                .build().toUriString();
+
         clearAuthenticationAttributes(request);
         getRedirectStrategy().sendRedirect(request, response, targetUrl);
     }

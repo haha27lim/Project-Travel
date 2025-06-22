@@ -137,6 +137,7 @@ public class UserService {
 		return userRepo.findByEmail(email);
 	}
 
+	@Transactional
 	public User registerUser(User user) {
 		if (user.getPassword() != null)
 			user.setPassword(passwordEncoder.encode(user.getPassword()));

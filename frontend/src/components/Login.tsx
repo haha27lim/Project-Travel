@@ -7,25 +7,18 @@ import AuthService from "../services/auth.service";
 import { useAuth } from "../contexts/AuthContext";
 import { ArrowLeft, Eye, EyeOff, LogIn } from "lucide-react";
 import '../styles/components/Login.css';
-import { jwtDecode } from "jwt-decode";
 
 
 const Login: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [message, setMessage] = useState<string>("");
-  const { setCurrentUser, setShowAdminBoard, setToken } = useAuth();
+  const { setCurrentUser, setShowAdminBoard } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
   const [showPassword, setShowPassword] = useState<boolean>(false);
 
   const searchParams = new URLSearchParams(location.search);
   const returnUrl = searchParams.get('returnUrl') || '/profile';
-
-  type MyJwtPayload = {
-    sub: string;
-    roles?: string;
-    email?: string;
-  };
 
   useEffect(() => {
     const currentUser = AuthService.getCurrentUser();
@@ -46,23 +39,10 @@ const Login: React.FC = () => {
     setLoading(true);
 
     AuthService.login(username, password).then(
-      (response) => {
-        if (response.jwtToken) {
-          localStorage.setItem("JWT_TOKEN", response.jwtToken);
-          setToken(response.jwtToken);
-
-          const decodedToken = jwtDecode<MyJwtPayload>(response.jwtToken);
-
-          const user = {
-            username: decodedToken.sub,
-            email: decodedToken.email,
-            roles: decodedToken.roles ? decodedToken.roles.split(",") : [],
-          };
-          setCurrentUser(user);
+      (user) => {
+        setCurrentUser(user);
+        if (user.roles) {
           setShowAdminBoard(user.roles.includes("ROLE_ADMIN"));
-        } else {
-          setCurrentUser(response);
-          setShowAdminBoard(response.roles.includes("ROLE_ADMIN"));
         }
         navigate(returnUrl);
       },
