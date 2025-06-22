@@ -2,7 +2,7 @@ import axios, { AxiosError } from 'axios';
 import { Trip } from '../types/trip';
 import EventBus from '../common/EventBus';
 
-const API_URL = '/api/trips';
+const API_URL = `${import.meta.env.VITE_API_URL}/api/trips`;
 
 const instance = axios.create({
     baseURL: API_URL,
