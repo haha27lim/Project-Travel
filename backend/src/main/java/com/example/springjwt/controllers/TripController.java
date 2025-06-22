@@ -8,6 +8,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -37,8 +39,12 @@ public class TripController {
     private EmailService emailService;
 
     @GetMapping("/user")
-    public ResponseEntity<?> getCurrentUserTrips(Authentication authentication) {
-        return ResponseEntity.ok(tripService.getTripsByUsername(authentication.getName()));
+    public ResponseEntity<?> getCurrentUserTrips(@AuthenticationPrincipal UserDetails userDetails) {
+        if (userDetails == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body("Unauthorized: No authentication found.");
+        }
+        return ResponseEntity.ok(tripService.getTripsByUsername(userDetails.getUsername()));
     }
 
     @GetMapping
