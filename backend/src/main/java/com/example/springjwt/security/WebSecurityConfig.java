@@ -78,7 +78,8 @@ public class WebSecurityConfig {
         "https://project-travel-4zdr.vercel.app",
         "https://project-travel-ww3y.onrender.com"));
     configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
-    configuration.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type", "X-Requested-With", "X-XSRF-TOKEN"));
+    configuration.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type", "X-Requested-With", "X-XSRF-TOKEN", "Accept"));
+    configuration.setExposedHeaders(Arrays.asList("Authorization", "X-XSRF-TOKEN"));
     configuration.setAllowCredentials(true);
     configuration.setMaxAge(3600L);
 

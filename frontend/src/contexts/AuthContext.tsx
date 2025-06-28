@@ -21,8 +21,19 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [currentUser, setCurrentUser] = useState<IUser | undefined>(undefined);
   const [showAdminBoard, setShowAdminBoard] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [hasCheckedAuth, setHasCheckedAuth] = useState(false);
 
   const fetchUser = useCallback(async () => {
+
+    if (hasCheckedAuth) return;
+    
+    const storedUser = AuthService.getCurrentUser();
+    if (!storedUser) {
+      setLoading(false);
+      setHasCheckedAuth(true);
+      return;
+    }
+
     try {
       const { data } = await api.get(`/auth/user`);
       setCurrentUser(data);
@@ -33,16 +44,19 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       }
     } catch (error) {
       console.error("Not authenticated or error fetching user", error);
+      AuthService.logout();
       setCurrentUser(undefined);
       setShowAdminBoard(false);
+    } finally {
+      setLoading(false);
+      setHasCheckedAuth(true);
     }
-  }, []);
+  }, [hasCheckedAuth]);
 
   useEffect(() => {
     
     const checkLoginStatus = async () => {
       await fetchUser();
-      setLoading(false);
     };
     checkLoginStatus();
   }, [fetchUser]);

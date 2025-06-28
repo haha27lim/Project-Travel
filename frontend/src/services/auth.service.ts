@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_URL = "/api/auth/";
+const API_URL = `${import.meta.env.VITE_API_URL}/api/auth/`;
 
 axios.defaults.withCredentials = true;
 
@@ -22,6 +22,10 @@ const login = (username: string, password: string) => {
     .then((response) => {
       if (response.data.username) {
         localStorage.setItem('user', JSON.stringify(response.data));
+
+        if (response.data.token) {
+          localStorage.setItem('authToken', response.data.token);
+        }
       }
 
       return response.data;
@@ -30,6 +34,8 @@ const login = (username: string, password: string) => {
 
 const logout = () => {
   localStorage.removeItem('user');
+  localStorage.removeItem("authToken");
+  localStorage.removeItem("CSRF_TOKEN");
   return axios.post(API_URL + 'signout').then((response) => {
     return response.data;
   });

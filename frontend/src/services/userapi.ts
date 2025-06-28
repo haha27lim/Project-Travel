@@ -1,4 +1,6 @@
 import axios from "axios";
+import EventBus from "../common/EventBus";
+import AuthService from "./auth.service";
 
 console.log("API URL:", process.env.VITE_API_URL);
 
@@ -15,6 +17,11 @@ const api = axios.create({
 
 api.interceptors.request.use(
   async (config) => {
+    const user = AuthService.getCurrentUser();
+    if (user && user.token) {
+      config.headers["Authorization"] = `Bearer ${user.token}`;
+    }
+    
     let csrfToken = localStorage.getItem("CSRF_TOKEN");
     if (!csrfToken) {
       try {
@@ -38,6 +45,21 @@ api.interceptors.request.use(
     return config;
   },
   (error) => {
+    return Promise.reject(error);
+  }
+);
+
+
+api.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    if (error.response?.status === 401) {
+      // Only logout if we're not already on the login page
+      if (window.location.pathname !== '/login') {
+        EventBus.dispatch("logout");
+        window.location.href = '/login';
+      }
+    }
     return Promise.reject(error);
   }
 );
