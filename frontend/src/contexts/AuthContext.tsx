@@ -28,23 +28,20 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     if (hasCheckedAuth) return;
     
     const storedUser = AuthService.getCurrentUser();
-    if (!storedUser) {
-      setLoading(false);
-      setHasCheckedAuth(true);
-      return;
-    }
 
     try {
       const { data } = await api.get(`/auth/user`);
       setCurrentUser(data);
-      if (data.roles.includes("ROLE_ADMIN")) {
+      if (data.roles && data.roles.includes("ROLE_ADMIN")) {
         setShowAdminBoard(true);
       } else {
         setShowAdminBoard(false);
       }
     } catch (error) {
       console.error("Not authenticated or error fetching user", error);
-      AuthService.logout();
+      if (storedUser) {
+        AuthService.logout();
+      }
       setCurrentUser(undefined);
       setShowAdminBoard(false);
     } finally {
