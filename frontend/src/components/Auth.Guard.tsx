@@ -7,11 +7,7 @@ interface AuthGuardProps {
 }
 
 export const AuthGuard: React.FC<AuthGuardProps> = ({ children, requireAdmin = false }) => {
-  const { currentUser, showAdminBoard, loading } = useAuth();
-
-  if (loading) {
-    return <div>Loading...</div>;
-  }
+  const { currentUser, showAdminBoard } = useAuth();
 
   if (!currentUser) {
 

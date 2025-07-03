@@ -12,7 +12,7 @@ import '../styles/components/Login.css';
 const Login: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [message, setMessage] = useState<string>("");
-  const { setCurrentUser, setShowAdminBoard, loading: authLoading } = useAuth();
+  const { setCurrentUser, setShowAdminBoard } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
   const [showPassword, setShowPassword] = useState<boolean>(false);
@@ -21,13 +21,13 @@ const Login: React.FC = () => {
   const returnUrl = searchParams.get('returnUrl') || '/profile';
 
   useEffect(() => {
-    if (!authLoading) {
-      const currentUser = AuthService.getCurrentUser();
-      if (currentUser) {
-        navigate(returnUrl);
-      }
+
+    const currentUser = AuthService.getCurrentUser();
+    if (currentUser) {
+      navigate(returnUrl);
     }
-  }, [returnUrl, authLoading, navigate]);
+
+  }, [returnUrl, navigate]);
 
   const validationSchema = Yup.object().shape({
     username: Yup.string().required("This field is required!"),
