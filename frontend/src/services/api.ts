@@ -18,7 +18,6 @@ instance.interceptors.response.use(
     (error: AxiosError) => {
         if (error.response?.status === 401) {
             EventBus.dispatch("logout");
-            window.location.href = '/login';
         }
         return Promise.reject(error);
     }

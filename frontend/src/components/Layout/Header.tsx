@@ -1,11 +1,11 @@
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "../../contexts/AuthContext";
 import { Compass, LogIn, UserPlus } from "lucide-react";
 import '../../styles/components/Header.css';
 
 export const Header: React.FC = () => {
     const navigate = useNavigate();
-   
+    const location = useLocation();
     const { isAuthenticated, logout, showAdminBoard } = useAuth();
 
 
@@ -17,7 +17,10 @@ export const Header: React.FC = () => {
                 console.error("Logout failed:", e);
             }
         }
-        navigate('/login');
+        const protectedRoutes = ['/dashboard', '/profile', '/user', '/admin', '/places/saved', '/trips', '/ai-planner'];
+        if (protectedRoutes.some(route => location.pathname.startsWith(route))) {
+            navigate('/login');
+        }
     };
 
     return (

@@ -11,7 +11,6 @@ interface AuthContextType {
   isAuthenticated: boolean;
   logout: () => void;
   fetchUser: () => Promise<void>;
-  loading: boolean;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -20,7 +19,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const [currentUser, setCurrentUser] = useState<IUser | undefined>(undefined);
   const [showAdminBoard, setShowAdminBoard] = useState(false);
-  const [loading, setLoading] = useState(true);
   const [hasCheckedAuth, setHasCheckedAuth] = useState(false);
 
   const fetchUser = useCallback(async () => {
@@ -45,7 +43,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       setCurrentUser(undefined);
       setShowAdminBoard(false);
     } finally {
-      setLoading(false);
       setHasCheckedAuth(true);
     }
   }, [hasCheckedAuth]);
@@ -64,10 +61,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     setShowAdminBoard(false);
   };
 
-  if (loading) {
-    return <div>Loading application...</div>;
-  }
-
   return (
     <AuthContext.Provider value={{
       currentUser,
@@ -76,8 +69,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       setShowAdminBoard,
       isAuthenticated: !!currentUser,
       logout,
-      fetchUser,
-      loading
+      fetchUser
     }}>
       {children}
     </AuthContext.Provider>

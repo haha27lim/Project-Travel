@@ -57,7 +57,6 @@ api.interceptors.response.use(
       // Only logout if we're not already on the login page
       if (window.location.pathname !== '/login') {
         EventBus.dispatch("logout");
-        window.location.href = '/login';
       }
     }
     return Promise.reject(error);
