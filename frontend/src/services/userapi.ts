@@ -2,11 +2,11 @@ import axios from "axios";
 import EventBus from "../common/EventBus";
 import AuthService from "./auth.service";
 
-console.log("API URL:", process.env.VITE_API_URL);
+console.log("API URL:", import.meta.env.VITE_API_URL);
 
 
 const api = axios.create({
-  baseURL: `${process.env.VITE_API_URL}/api`,
+  baseURL: `${import.meta.env.VITE_API_URL}/api`,
   headers: {
     "Content-Type": "application/json",
     Accept: "application/json",
@@ -20,13 +20,16 @@ api.interceptors.request.use(
     const user = AuthService.getCurrentUser();
     if (user && user.token) {
       config.headers["Authorization"] = `Bearer ${user.token}`;
+    } else {
+      console.warn("User is not authenticated. Skipping CSRF token fetch.");
+      return config;
     }
     
     let csrfToken = localStorage.getItem("CSRF_TOKEN");
     if (!csrfToken) {
       try {
         const response = await axios.get(
-          `${process.env.VITE_API_URL}/api/csrf-token`,
+          `${import.meta.env.VITE_API_URL}/csrf-token`,
           { withCredentials: true }
         );
         if (response.data.token) {

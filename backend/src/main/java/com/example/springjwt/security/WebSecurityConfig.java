@@ -99,7 +99,7 @@ public class WebSecurityConfig {
             .requestMatchers("/", "/index.html", "/assets/**", "/*.ico", "/*.png", "/*.svg", "/*.webmanifest",
                 "/*.js", "/vite.svg").permitAll()
             .requestMatchers("/api/auth/**", "/oauth2/**", "/login/oauth2/code/google", "/api/health").permitAll()
-            .requestMatchers("/api/csrf-token").permitAll()
+            .requestMatchers("/csrf-token").permitAll()
             .requestMatchers("/api/test/**").permitAll()
             .requestMatchers("/oauth2/**").permitAll()
             .requestMatchers("/h2-console/**").permitAll()

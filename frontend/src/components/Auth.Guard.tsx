@@ -14,6 +14,14 @@ export const AuthGuard: React.FC<AuthGuardProps> = ({ children, requireAdmin = f
     return <Navigate to={`/login`} replace />;
   }
 
+  if (typeof currentUser === 'undefined') {
+    return null;
+  }
+  
+  if (!currentUser) {
+    return <Navigate to={`/login`} replace />;
+  }
+
   if (requireAdmin && !showAdminBoard) {
 
     return <Navigate to="/" replace />;
