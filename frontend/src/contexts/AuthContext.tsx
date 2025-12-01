@@ -11,6 +11,7 @@ interface AuthContextType {
   isAuthenticated: boolean;
   logout: () => void;
   fetchUser: () => Promise<void>;
+  isLoading: boolean;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -69,7 +70,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       setShowAdminBoard,
       isAuthenticated: !!currentUser,
       logout,
-      fetchUser
+      fetchUser,
+      isLoading: !hasCheckedAuth
     }}>
       {children}
     </AuthContext.Provider>
