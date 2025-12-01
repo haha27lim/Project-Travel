@@ -90,7 +90,7 @@ public class WebSecurityConfig {
   @Bean
   public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
     http.csrf(csrf -> csrf.csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
-        .ignoringRequestMatchers("/api/auth/**", "/h2-console/**"))
+        .ignoringRequestMatchers("/api/auth/**", "/h2-console/**", "/api/ai/**"))
         .cors(cors -> cors.configurationSource(corsConfigurationSource()))
         .exceptionHandling(exception -> exception.authenticationEntryPoint(unauthorizedHandler))
         .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
@@ -102,6 +102,7 @@ public class WebSecurityConfig {
             .requestMatchers("/api/test/**").permitAll()
             .requestMatchers("/oauth2/**").permitAll()
             .requestMatchers("/h2-console/**").permitAll()
+            .requestMatchers("/api/ai/**").permitAll()
             .anyRequest().authenticated())
         .headers(headers -> headers
             .frameOptions(frame -> frame.sameOrigin())

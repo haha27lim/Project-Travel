@@ -56,7 +56,7 @@ public class AITravelService {
             // Set up headers
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.APPLICATION_JSON);
-            headers.set("x-goog-api-key", geminiApiKey);
+            headers.set("X-goog-api-key", geminiApiKey);
 
             // Make the request
             HttpEntity<String> entity = new HttpEntity<>(objectMapper.writeValueAsString(requestBody), headers);
