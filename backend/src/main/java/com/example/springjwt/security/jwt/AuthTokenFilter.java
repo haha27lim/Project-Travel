@@ -55,10 +55,21 @@ public class AuthTokenFilter extends OncePerRequestFilter {
   }
 
   private String parseJwt(HttpServletRequest request) {
+    // 1. Try cookie first (works in local / first-party contexts)
     String jwt = jwtUtils.getJwtFromCookies(request);
-    if (jwt == null) {
-      logger.debug("No JWT cookie found in request");
+    if (jwt != null) {
+      return jwt;
     }
-    return jwt;
+    
+    logger.debug("No JWT cookie found in request, checking Authorization header");
+
+    // 2. Fallback: check Authorization: Bearer <token> header
+    String headerAuth = request.getHeader("Authorization");
+    if (headerAuth != null && headerAuth.startsWith("Bearer ")) {
+      return headerAuth.substring(7);
+    }
+
+    logger.debug("No Authorization Bearer token found in request");
+    return null;
   }
 }
